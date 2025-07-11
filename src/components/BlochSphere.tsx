@@ -38,4 +38,5 @@ export default function BlochSphere() {
       mountRef.current!.removeChild(renderer.domElement);
     };
   }, []);
+  return <div ref={mountRef} />;
 }
