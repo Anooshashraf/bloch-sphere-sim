@@ -69,7 +69,11 @@ export default function BlochSphere() {
     animate();
     return () => {
       mountRef.current!.removeChild(renderer.domElement);
+      renderer.domElement.removeEventListener("mousedown", onMouseDown);
+      renderer.domElement.removeEventListener("mouseup", onMouseUp);
+      renderer.domElement.removeEventListener("mouseleave", onMouseUp);
+      renderer.domElement.removeEventListener("mousemove", onMouseMove);
     };
   }, []);
-  return <div ref={mountRef} />;
+  return <div ref={mountRef} style={{ cursor: "grab" }} />;
 }
