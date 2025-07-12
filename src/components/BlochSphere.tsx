@@ -11,6 +11,8 @@ export default function BlochSphere() {
     const scene = new Three.Scene();
     const camera = new Three.PerspectiveCamera(75, width / height, 0.1, 1000);
     const renderer = new Three.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    mountRef.current!.appendChild(renderer.domElement);
 
     // Sphere
     const geometry = new Three.SphereGeometry(1, 32, 32);
@@ -29,6 +31,9 @@ export default function BlochSphere() {
     scene.add(blochVector);
 
     camera.position.z = 3;
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+
     function animate() {
       requestAnimationFrame(animate);
       renderer.render(scene, camera);
