@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as Three from "three";
 
 export default function BlochSphere() {
   const mountRef = useRef<HTMLDivElement>(null);
+  const [theta, setTheta] = useState(Math.PI / 2); // θ: 0 to π
+  const [phi, setPhi] = useState(0); // φ: 0 to 2π
+
   useEffect(() => {
     const width = 400;
     const height = 400;
@@ -24,10 +27,24 @@ export default function BlochSphere() {
     scene.add(sphere);
 
     // Bloch vector (example: along z)
+    // const vectorMaterial = new Three.LineBasicMaterial({ color: 0xff0000 });
+    // const points = [new Three.Vector3(0, 0, 0), new Three.Vector3(0, 1, 0)];
+    // const vectorGeometry = new Three.BufferGeometry().setFromPoints(points);
+    // const blochVector = new Three.Line(vectorGeometry, vectorMaterial);
+    // scene.add(blochVector);
+
+    // Bloch vector (will update on theta/phi change)
     const vectorMaterial = new Three.LineBasicMaterial({ color: 0xff0000 });
-    const points = [new Three.Vector3(0, 0, 0), new Three.Vector3(0, 1, 0)];
-    const vectorGeometry = new Three.BufferGeometry().setFromPoints(points);
-    const blochVector = new Three.Line(vectorGeometry, vectorMaterial);
+    const getVector = () => {
+      // Convert θ, φ to Cartesian coordinates (Bloch sphere)
+      const x = Math.sin(theta) * Math.cos(phi);
+      const y = Math.cos(theta);
+      const z = Math.sin(theta) * Math.sin(phi);
+      return [new Three.Vector3(0, 0, 0), new Three.Vector3(x, y, z)];
+    };
+    let points = getVector();
+    let vectorGeometry = new Three.BufferGeometry().setFromPoints(points);
+    let blochVector = new Three.Line(vectorGeometry, vectorMaterial);
     scene.add(blochVector);
 
     camera.position.z = 3;
