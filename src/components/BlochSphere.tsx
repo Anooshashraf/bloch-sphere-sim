@@ -35,15 +35,15 @@ export default function BlochSphere() {
 
     // Bloch vector (will update on theta/phi change)
     const vectorMaterial = new Three.LineBasicMaterial({ color: 0xff0000 });
-    const getVector = () => {
-      // Convert θ, φ to Cartesian coordinates (Bloch sphere)
-      const x = Math.sin(theta) * Math.cos(phi);
-      const y = Math.cos(theta);
-      const z = Math.sin(theta) * Math.sin(phi);
-      return [new Three.Vector3(0, 0, 0), new Three.Vector3(x, y, z)];
-    };
-    let points = getVector();
-    let vectorGeometry = new Three.BufferGeometry().setFromPoints(points);
+    // const getVector = () => {
+    //   // Convert θ, φ to Cartesian coordinates (Bloch sphere)
+    //   const x = Math.sin(theta) * Math.cos(phi);
+    //   const y = Math.cos(theta);
+    //   const z = Math.sin(theta) * Math.sin(phi);
+    //   return [new Three.Vector3(0, 0, 0), new Three.Vector3(x, y, z)];
+    // };
+    // let points = getVector();
+    let vectorGeometry = new Three.BufferGeometry();
     let blochVector = new Three.Line(vectorGeometry, vectorMaterial);
     scene.add(blochVector);
 
@@ -80,8 +80,15 @@ export default function BlochSphere() {
     renderer.domElement.addEventListener("mousemove", onMouseMove);
 
     function animate() {
-      requestAnimationFrame(animate);
+      // Update Bloch vector direction according to theta and phi
+      const x = Math.sin(theta) * Math.cos(phi);
+      const y = Math.cos(theta);
+      const z = Math.sin(theta) * Math.sin(phi);
+      const points = [new Three.Vector3(0, 0, 0), new Three.Vector3(x, y, z)];
+      blochVector.geometry.setFromPoints(points);
+
       renderer.render(scene, camera);
+      requestAnimationFrame(animate);
     }
     animate();
     return () => {
@@ -91,6 +98,36 @@ export default function BlochSphere() {
       renderer.domElement.removeEventListener("mouseleave", onMouseUp);
       renderer.domElement.removeEventListener("mousemove", onMouseMove);
     };
-  }, []);
-  return <div ref={mountRef} style={{ cursor: "grab" }} />;
+  }, [theta, phi]);
+  return (
+    <div>
+      <div ref={mountRef} style={{ cursor: "grab", marginBottom: 16 }} />
+      <div style={{ width: 400 }}>
+        <label>
+          θ (theta): {theta.toFixed(2)} rad
+          <input
+            type="range"
+            min={0}
+            max={Math.PI}
+            step={0.01}
+            value={theta}
+            onChange={(e) => setTheta(Number(e.target.value))}
+            style={{ width: "100%" }}
+          />
+        </label>
+        <label>
+          φ (phi): {phi.toFixed(2)} rad
+          <input
+            type="range"
+            min={0}
+            max={Math.PI * 2}
+            step={0.01}
+            value={phi}
+            onChange={(e) => setPhi(Number(e.target.value))}
+            style={{ width: "100%" }}
+          />
+        </label>
+      </div>
+    </div>
+  );
 }
