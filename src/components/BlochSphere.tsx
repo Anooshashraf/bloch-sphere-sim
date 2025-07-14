@@ -147,6 +147,15 @@ export default function BlochSphere() {
   const [theta, setTheta] = useState(Math.PI / 2); // θ: 0 to π
   const [phi, setPhi] = useState(0); // φ: 0 to 2π
 
+  // These refs keep the latest values for animation and mouse events
+  const thetaRef = useRef(theta);
+  const phiRef = useRef(phi);
+
+  useEffect(() => {
+    thetaRef.current = theta;
+    phiRef.current = phi;
+  }, [theta, phi]);
+
   useEffect(() => {
     const width = 400;
     const height = 400;
@@ -182,7 +191,6 @@ export default function BlochSphere() {
     // Mouse drag to rotate the group
     let isDragging = false;
     let previousMousePosition = { x: 0, y: 0 };
-    let groupRotation = { x: theta - Math.PI / 2, y: phi };
 
     const onMouseDown = (e: MouseEvent) => {
       isDragging = true;
@@ -199,11 +207,15 @@ export default function BlochSphere() {
         x: e.clientX - previousMousePosition.x,
         y: e.clientY - previousMousePosition.y,
       };
-      groupRotation.y += deltaMove.x * 0.01;
-      groupRotation.x += deltaMove.y * 0.01;
+      // Update refs directly for smooth dragging
+      phiRef.current += deltaMove.x * 0.01;
+      thetaRef.current += deltaMove.y * 0.01;
+      // Clamp theta to [0, π]
+      thetaRef.current = Math.max(0, Math.min(Math.PI, thetaRef.current));
       previousMousePosition = { x: e.clientX, y: e.clientY };
-      setTheta(groupRotation.x + Math.PI / 2);
-      setPhi(groupRotation.y);
+      // Update sliders
+      setTheta(thetaRef.current);
+      setPhi(phiRef.current);
     };
 
     renderer.domElement.addEventListener("mousedown", onMouseDown);
@@ -213,8 +225,8 @@ export default function BlochSphere() {
 
     function animate() {
       // Rotate the group according to theta and phi
-      blochGroup.rotation.x = theta - Math.PI / 2; // θ: polar angle
-      blochGroup.rotation.y = phi; // φ: azimuthal angle
+      blochGroup.rotation.x = thetaRef.current - Math.PI / 2;
+      blochGroup.rotation.y = phiRef.current;
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     }
@@ -227,7 +239,7 @@ export default function BlochSphere() {
       renderer.domElement.removeEventListener("mouseleave", onMouseUp);
       renderer.domElement.removeEventListener("mousemove", onMouseMove);
     };
-  }, [theta, phi]);
+  }, []);
 
   return (
     <div>
