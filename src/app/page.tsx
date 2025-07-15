@@ -1,10 +1,11 @@
 import BlochSphere from "@/components/BlochSphere";
+import Circuit from "@/components/Circuit";
 
 export default function Home() {
   return (
     <main>
-      <h1>Bloch Sphere Simulator</h1>
       <BlochSphere />
+      <Circuit />
     </main>
   );
 }
