@@ -85,6 +85,11 @@ export default function BlochSphere() {
     renderer.domElement.addEventListener("mousemove", onMouseMove);
 
     function animate() {
+      const x = Math.sin(thetaRef.current) * Math.cos(phiRef.current);
+      const y = Math.cos(thetaRef.current);
+      const z = Math.sin(thetaRef.current) * Math.sin(phiRef.current);
+      const points = [new Three.Vector3(0, 0, 0), new Three.Vector3(x, y, z)];
+      blochVector.geometry.setFromPoints(points);
       // Rotate the group according to theta and phi
       blochGroup.rotation.x = thetaRef.current - Math.PI / 2;
       blochGroup.rotation.y = phiRef.current;
