@@ -24,6 +24,9 @@ const DEMO_CIRCUIT = [
 ];
 
 export default function Circuit() {
+  // For demo, not interactive yet
+  const [circuit] = useState(DEMO_CIRCUIT);
+  const [selectedGate, setSelectedGate] = useState<string | null>(null);
   // Modern UI styles
   const cardStyle: React.CSSProperties = {
     background: "rgba(24,28,36,0.98)",
@@ -49,9 +52,6 @@ export default function Circuit() {
     transition: "background 0.2s, transform 0.2s",
     marginRight: 12,
   };
-
-  // For demo, not interactive yet
-  const [circuit] = useState(DEMO_CIRCUIT);
 
   return (
     <div style={cardStyle}>
