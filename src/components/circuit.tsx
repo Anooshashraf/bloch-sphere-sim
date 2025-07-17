@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 
-// List of gates for the palette
 const GATE_PALETTE = [
   { label: "X", name: "Pauli-X" },
   { label: "Y", name: "Pauli-Y" },
@@ -16,18 +15,58 @@ const GATE_PALETTE = [
   { label: "I", name: "Identity" },
 ];
 
-const DEMO_CIRCUIT = [
-  // Each array is a qubit wire, each string is a gate or ""
+const INIT_CIRCUIT = [
   ["H", "CX", "", "T"],
   ["", "CX", "Z", ""],
   ["", "CCX", "", "SWAP"],
 ];
 
 export default function Circuit() {
-  // For demo, not interactive yet
-  const [circuit] = useState(DEMO_CIRCUIT);
+  const [circuit, setCircuit] = useState(INIT_CIRCUIT);
   const [selectedGate, setSelectedGate] = useState<string | null>(null);
-  // Modern UI styles
+
+  // Add a qubit (wire)
+  const addQubit = () => {
+    setCircuit([...circuit, Array(circuit[0]?.length || 4).fill("")]);
+  };
+
+  // Remove last qubit
+  const removeQubit = () => {
+    if (circuit.length > 1) setCircuit(circuit.slice(0, -1));
+  };
+
+  // Add a column (time step)
+  const addColumn = () => {
+    setCircuit(circuit.map((wire) => [...wire, ""]));
+  };
+
+  // Remove last column
+  const removeColumn = () => {
+    if (circuit[0].length > 1)
+      setCircuit(circuit.map((wire) => wire.slice(0, -1)));
+  };
+
+  // Place gate in slot
+  const placeGate = (qi: number, gj: number) => {
+    if (!selectedGate) return;
+    setCircuit((prev) =>
+      prev.map((wire, i) =>
+        wire.map((gate, j) => (i === qi && j === gj ? selectedGate : gate))
+      )
+    );
+    setSelectedGate(null);
+  };
+
+  // Remove gate from slot
+  const removeGate = (qi: number, gj: number) => {
+    setCircuit((prev) =>
+      prev.map((wire, i) =>
+        wire.map((gate, j) => (i === qi && j === gj ? "" : gate))
+      )
+    );
+  };
+
+  // UI styles
   const cardStyle: React.CSSProperties = {
     background: "rgba(24,28,36,0.98)",
     borderRadius: 18,
@@ -66,7 +105,8 @@ export default function Circuit() {
           marginBottom: 16,
         }}
       >
-        Drag gates from the palette to build your quantum circuit.
+        Click a gate, then click an empty slot to place it. Click a gate in the
+        circuit to remove it.
       </div>
 
       {/* Gate Palette */}
@@ -82,28 +122,58 @@ export default function Circuit() {
         {GATE_PALETTE.map((gate) => (
           <div
             key={gate.label}
-            draggable
             title={gate.name}
+            onClick={() => setSelectedGate(gate.label)}
             style={{
               width: 44,
               height: 44,
-              background: "linear-gradient(90deg, #232b3a 60%, #181c24 100%)",
-              border: "2px solid #4c6cff",
+              background:
+                selectedGate === gate.label
+                  ? "linear-gradient(90deg, #ffc300 0%, #ff4c4c 100%)"
+                  : "linear-gradient(90deg, #232b3a 60%, #181c24 100%)",
+              border:
+                selectedGate === gate.label
+                  ? "2px solid #ffc300"
+                  : "2px solid #4c6cff",
               borderRadius: 8,
-              color: "#ffc300",
+              color: selectedGate === gate.label ? "#232b3a" : "#ffc300",
               fontWeight: 700,
               fontSize: 22,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              cursor: "grab",
+              cursor: "pointer",
               boxShadow: "0 2px 8px #0006",
               userSelect: "none",
+              transition: "all 0.2s",
             }}
           >
             {gate.label}
           </div>
         ))}
+      </div>
+
+      {/* Circuit Controls */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: 12,
+          marginBottom: 18,
+        }}
+      >
+        <button style={buttonStyle} onClick={addQubit}>
+          + Qubit
+        </button>
+        <button style={buttonStyle} onClick={removeQubit}>
+          - Qubit
+        </button>
+        <button style={buttonStyle} onClick={addColumn}>
+          + Step
+        </button>
+        <button style={buttonStyle} onClick={removeColumn}>
+          - Step
+        </button>
       </div>
 
       {/* Demo Circuit */}
@@ -118,79 +188,6 @@ export default function Circuit() {
           overflowX: "auto",
         }}
       >
-        {/* {circuit.map((wire, i) => (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: 18,
-              minHeight: 44,
-            }}
-          >
-            <span
-              style={{
-                color: "#aaa",
-                fontWeight: 600,
-                marginRight: 10,
-                fontSize: 16,
-                minWidth: 32,
-                display: "inline-block",
-              }}
-            >
-              q{i}
-            </span>
-            <div
-              style={{
-                height: 4,
-                background: "#444",
-                flex: 1,
-                marginRight: 10,
-                borderRadius: 2,
-                position: "relative",
-                top: 0,
-              }}
-            />
-            {wire.map((gate, j) =>
-              gate ? (
-                <div
-                  key={j}
-                  style={{
-                    width: 44,
-                    height: 44,
-                    background:
-                      "linear-gradient(90deg, #ffc300 0%, #ff4c4c 100%)",
-                    border: "2px solid #fff",
-                    borderRadius: 8,
-                    color: "#232b3a",
-                    fontWeight: 700,
-                    fontSize: 22,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginLeft: -22,
-                    zIndex: 2,
-                    boxShadow: "0 2px 8px #0006",
-                  }}
-                  title={gate}
-                >
-                  {gate}
-                </div>
-              ) : (
-                <div
-                  key={j}
-                  style={{
-                    width: 44,
-                    height: 44,
-                    marginLeft: -22,
-                    background: "transparent",
-                  }}
-                />
-              )
-            )}
-          </div> */}
-        {/* ))} */}
-
         {circuit.map((wire, i) => (
           <div
             key={i}
@@ -216,7 +213,7 @@ export default function Circuit() {
             <div
               style={{
                 display: "flex",
-                gap: 8, // space between gates
+                gap: 8,
                 alignItems: "center",
                 flex: 1,
               }}
@@ -243,6 +240,7 @@ export default function Circuit() {
                       cursor: "pointer",
                     }}
                     title={gate}
+                    onClick={() => removeGate(i, j)}
                     onMouseEnter={(e) => {
                       (e.currentTarget as HTMLDivElement).style.boxShadow =
                         "0 0 0 4px #ffc30088";
@@ -264,11 +262,17 @@ export default function Circuit() {
                     style={{
                       width: 44,
                       height: 44,
-                      background: "rgba(255,255,255,0.04)",
-                      border: "1px dashed #4c6cff",
+                      background: selectedGate
+                        ? "#333"
+                        : "rgba(255,255,255,0.04)",
+                      border: selectedGate
+                        ? "2px dashed #ffc300"
+                        : "1px dashed #4c6cff",
                       borderRadius: 8,
                       transition: "border 0.2s, background 0.2s",
+                      cursor: selectedGate ? "pointer" : "default",
                     }}
+                    onClick={() => selectedGate && placeGate(i, j)}
                   />
                 )
               )}
