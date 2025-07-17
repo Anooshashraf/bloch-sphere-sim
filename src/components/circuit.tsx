@@ -213,69 +213,87 @@ export default function Circuit() {
             <div
               style={{
                 display: "flex",
-                gap: 8,
                 alignItems: "center",
                 flex: 1,
+                position: "relative",
               }}
             >
-              {wire.map((gate, j) =>
-                gate ? (
-                  <div
-                    key={j}
-                    style={{
-                      width: 44,
-                      height: 44,
-                      background:
-                        "linear-gradient(90deg, #ffc300 0%, #ff4c4c 100%)",
-                      border: "2px solid #fff",
-                      borderRadius: 8,
-                      color: "#232b3a",
-                      fontWeight: 700,
-                      fontSize: 22,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      boxShadow: "0 2px 8px #0006",
-                      transition: "box-shadow 0.2s, border 0.2s",
-                      cursor: "pointer",
-                    }}
-                    title={gate}
-                    onClick={() => removeGate(i, j)}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLDivElement).style.boxShadow =
-                        "0 0 0 4px #ffc30088";
-                      (e.currentTarget as HTMLDivElement).style.border =
-                        "2px solid #ffc300";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLDivElement).style.boxShadow =
-                        "0 2px 8px #0006";
-                      (e.currentTarget as HTMLDivElement).style.border =
-                        "2px solid #fff";
-                    }}
-                  >
-                    {gate}
-                  </div>
-                ) : (
-                  <div
-                    key={j}
-                    style={{
-                      width: 44,
-                      height: 44,
-                      background: selectedGate
-                        ? "#333"
-                        : "rgba(255,255,255,0.04)",
-                      border: selectedGate
-                        ? "2px dashed #ffc300"
-                        : "1px dashed #4c6cff",
-                      borderRadius: 8,
-                      transition: "border 0.2s, background 0.2s",
-                      cursor: selectedGate ? "pointer" : "default",
-                    }}
-                    onClick={() => selectedGate && placeGate(i, j)}
-                  />
-                )
-              )}
+              {/* Wire line */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  right: 0,
+                  top: "50%",
+                  height: 4,
+                  background: "#444",
+                  borderRadius: 2,
+                  zIndex: 0,
+                }}
+              />
+              {/* Gates */}
+              <div
+                style={{ display: "flex", gap: 8, width: "100%", zIndex: 1 }}
+              >
+                {wire.map((gate, j) =>
+                  gate ? (
+                    <div
+                      key={j}
+                      style={{
+                        width: 44,
+                        height: 44,
+                        background:
+                          "linear-gradient(90deg, #ffc300 0%, #ff4c4c 100%)",
+                        border: "2px solid #fff",
+                        borderRadius: 8,
+                        color: "#232b3a",
+                        fontWeight: 700,
+                        fontSize: 22,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxShadow: "0 2px 8px #0006",
+                        transition: "box-shadow 0.2s, border 0.2s",
+                        cursor: "pointer",
+                      }}
+                      title={gate}
+                      onClick={() => removeGate(i, j)}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLDivElement).style.boxShadow =
+                          "0 0 0 4px #ffc30088";
+                        (e.currentTarget as HTMLDivElement).style.border =
+                          "2px solid #ffc300";
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLDivElement).style.boxShadow =
+                          "0 2px 8px #0006";
+                        (e.currentTarget as HTMLDivElement).style.border =
+                          "2px solid #fff";
+                      }}
+                    >
+                      {gate}
+                    </div>
+                  ) : (
+                    <div
+                      key={j}
+                      style={{
+                        width: 44,
+                        height: 44,
+                        background: selectedGate
+                          ? "#333"
+                          : "rgba(255,255,255,0.04)",
+                        border: selectedGate
+                          ? "2px dashed #ffc300"
+                          : "1px dashed #4c6cff",
+                        borderRadius: 8,
+                        transition: "border 0.2s, background 0.2s",
+                        cursor: selectedGate ? "pointer" : "default",
+                      }}
+                      onClick={() => selectedGate && placeGate(i, j)}
+                    />
+                  )
+                )}
+              </div>
             </div>
           </div>
         ))}
