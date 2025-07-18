@@ -140,13 +140,16 @@ export default function Circuit() {
                   ? "2px solid #ffc300"
                   : "2px solid #4c6cff",
               borderRadius: 8,
-              color: selectedGate === gate.label ? "#232b3a" : "#ffc300",
+              color:
+                selectedGate === gate.label || draggedGate === gate.label
+                  ? "#232b3a"
+                  : "#ffc300",
               fontWeight: 700,
               fontSize: 22,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              cursor: "pointer",
+              cursor: "grab",
               boxShadow: "0 2px 8px #0006",
               userSelect: "none",
               transition: "all 0.2s",
@@ -283,17 +286,32 @@ export default function Circuit() {
                       style={{
                         width: 44,
                         height: 44,
-                        background: selectedGate
+                        background: draggedGate
                           ? "#333"
                           : "rgba(255,255,255,0.04)",
-                        border: selectedGate
+                        border: draggedGate
                           ? "2px dashed #ffc300"
                           : "1px dashed #4c6cff",
                         borderRadius: 8,
                         transition: "border 0.2s, background 0.2s",
-                        cursor: selectedGate ? "pointer" : "default",
+                        cursor: draggedGate ? "pointer" : "default",
                       }}
                       onClick={() => selectedGate && placeGate(i, j)}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                      }}
+                      onDrop={() => {
+                        if (draggedGate) {
+                          setCircuit((prev) =>
+                            prev.map((wire, wi) =>
+                              wire.map((g, ji) =>
+                                wi === i && ji === j ? draggedGate : g
+                              )
+                            )
+                          );
+                          setDraggedGate(null);
+                        }
+                      }}
                     />
                   )
                 )}
