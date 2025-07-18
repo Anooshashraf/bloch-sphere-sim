@@ -24,7 +24,8 @@ const INIT_CIRCUIT = [
 export default function Circuit() {
   const [circuit, setCircuit] = useState(INIT_CIRCUIT);
   const [selectedGate, setSelectedGate] = useState<string | null>(null);
-
+  // For drag-and-drop
+  const [draggedGate, setDraggedGate] = useState<string | null>(null);
   // Add a qubit (wire)
   const addQubit = () => {
     setCircuit([...circuit, Array(circuit[0]?.length || 4).fill("")]);
@@ -123,16 +124,19 @@ export default function Circuit() {
           <div
             key={gate.label}
             title={gate.name}
+            draggable
+            onDragStart={() => setDraggedGate(gate.label)}
+            onDragEnd={() => setDraggedGate(null)}
             onClick={() => setSelectedGate(gate.label)}
             style={{
               width: 44,
               height: 44,
               background:
-                selectedGate === gate.label
+                selectedGate === gate.label || draggedGate === gate.label
                   ? "linear-gradient(90deg, #ffc300 0%, #ff4c4c 100%)"
                   : "linear-gradient(90deg, #232b3a 60%, #181c24 100%)",
               border:
-                selectedGate === gate.label
+                selectedGate === gate.label || draggedGate === gate.label
                   ? "2px solid #ffc300"
                   : "2px solid #4c6cff",
               borderRadius: 8,
