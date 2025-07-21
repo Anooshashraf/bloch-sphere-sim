@@ -11,14 +11,14 @@ const GATE_PALETTE = [
   { label: "T", name: "T" },
   { label: "CX", name: "CNOT" },
   { label: "CCX", name: "Toffoli" },
-  { label: "SWAP", name: "SWAP" },
+  { label: "SW", name: "SWAP" }, // <--- Use "SW" for the box, "SWAP" for tooltip
   { label: "I", name: "Identity" },
 ];
 
 const INIT_CIRCUIT = [
   ["H", "CX", "", "T"],
   ["", "CX", "Z", ""],
-  ["", "CCX", "", "SWAP"],
+  ["", "CCX", "", "SW"],
 ];
 
 export default function Circuit() {
@@ -145,7 +145,7 @@ export default function Circuit() {
                   ? "#232b3a"
                   : "#ffc300",
               fontWeight: 700,
-              fontSize: 22,
+              fontSize: 18,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -153,6 +153,9 @@ export default function Circuit() {
               boxShadow: "0 2px 8px #0006",
               userSelect: "none",
               transition: "all 0.2s",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
             }}
           >
             {gate.label}
@@ -254,16 +257,21 @@ export default function Circuit() {
                         border: "2px solid #fff",
                         borderRadius: 8,
                         color: "#232b3a",
-                        fontWeight: 700,
-                        fontSize: 22,
+                        fontWeight: 500,
+                        fontSize: 18,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         boxShadow: "0 2px 8px #0006",
                         transition: "box-shadow 0.2s, border 0.2s",
                         cursor: "pointer",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
                       }}
-                      title={gate}
+                      title={
+                        GATE_PALETTE.find((g) => g.label === gate)?.name || gate
+                      }
                       onClick={() => removeGate(i, j)}
                       onMouseEnter={(e) => {
                         (e.currentTarget as HTMLDivElement).style.boxShadow =
