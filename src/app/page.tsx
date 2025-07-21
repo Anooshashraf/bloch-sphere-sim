@@ -1,13 +1,17 @@
-import BlochSphere from "@/components/BlochSphere";
-import Circuit from "@/components/circuit";
 import NavigationBar from "@/components/NavigationBar";
+import ClientOnly, {
+  BlochSphereNoSSR,
+  CircuitNoSSR,
+} from "@/components/ClientOnly";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <main>
+    <>
       <NavigationBar />
-      <BlochSphere />
-      <Circuit />
-    </main>
+      <ClientOnly>
+        <BlochSphereNoSSR />
+        <CircuitNoSSR />
+      </ClientOnly>
+    </>
   );
 }

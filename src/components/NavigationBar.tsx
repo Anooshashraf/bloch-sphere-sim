@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import BlochSphere from "@/components/BlochSphere";
+import Circuit from "@/components/circuit";
 
 export default function NavigationBar() {
   const [menuOpen, setMenuOpen] = useState(false);
