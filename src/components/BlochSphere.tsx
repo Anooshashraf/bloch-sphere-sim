@@ -172,7 +172,7 @@ const BlochSphere = () => {
     blochGroup.add(wireframe);
 
     // Axes with improved visuals
-    const axisLength = 0.9;
+    const axisLength = 0.8;
     const axes = [
       { dir: [1, 0, 0], color: 0xff4c4c, name: " " },
       { dir: [0, 1, 0], color: 0x4cff4c, name: " " },
@@ -183,7 +183,7 @@ const BlochSphere = () => {
       // Main axis line
       const points = [
         new Three.Vector3(0, 0, 0),
-        new Three.Vector3(...dir).multiplyScalar(axisLength),
+        new Three.Vector3(...dir).multiplyScalar(axisLength * 0.9),
       ];
       const axisGeom = new Three.BufferGeometry().setFromPoints(points);
       const axisMat = new Three.LineBasicMaterial({
@@ -201,9 +201,9 @@ const BlochSphere = () => {
         new Three.MeshBasicMaterial({ color })
       );
       arrow.position.set(
-        dir[0] * axisLength,
-        dir[1] * axisLength,
-        dir[2] * axisLength
+        dir[0] * axisLength * 0.9,
+        dir[1] * axisLength * 0.9,
+        dir[2] * axisLength * 0.9
       );
       arrow.quaternion.setFromUnitVectors(
         new Three.Vector3(0, 1, 0),
