@@ -114,7 +114,7 @@ const BlochSphere = () => {
     scene.background = new Three.Color(0x181c24);
 
     const camera = new Three.PerspectiveCamera(50, width / height, 0.1, 1000);
-    camera.position.z = 1;
+    camera.position.z = 2;
 
     const renderer = new Three.WebGLRenderer({ antialias: true, alpha: true });
     rendererRef.current = renderer;
@@ -147,7 +147,7 @@ const BlochSphere = () => {
     scene.add(blochGroup);
 
     // Sphere with improved material
-    const geometry = new Three.SphereGeometry(0.7, 64, 64);
+    const geometry = new Three.SphereGeometry(0.6, 64, 64);
     const material = new Three.MeshPhongMaterial({
       color: 0x0077ff,
       transparent: true,
@@ -172,7 +172,7 @@ const BlochSphere = () => {
     blochGroup.add(wireframe);
 
     // Axes with improved visuals
-    const axisLength = 1;
+    const axisLength = 0.9;
     const axes = [
       { dir: [1, 0, 0], color: 0xff4c4c, name: " " },
       { dir: [0, 1, 0], color: 0x4cff4c, name: " " },
@@ -188,7 +188,7 @@ const BlochSphere = () => {
       const axisGeom = new Three.BufferGeometry().setFromPoints(points);
       const axisMat = new Three.LineBasicMaterial({
         color,
-        linewidth: 2,
+        linewidth: 1,
         transparent: true,
         opacity: 0.8,
       });
@@ -197,7 +197,7 @@ const BlochSphere = () => {
 
       // Axis arrow head
       const arrow = new Three.Mesh(
-        new Three.ConeGeometry(0.05, 0.2, 16),
+        new Three.ConeGeometry(0.03, 0.15, 16),
         new Three.MeshBasicMaterial({ color })
       );
       arrow.position.set(
@@ -222,7 +222,7 @@ const BlochSphere = () => {
     // Bloch vector with improved visuals
     const vectorMaterial = new Three.LineBasicMaterial({
       color: 0xffc300,
-      linewidth: 4,
+      linewidth: 3,
     });
     const vectorGeometry = new Three.BufferGeometry();
     const blochVector = new Three.Line(vectorGeometry, vectorMaterial);
@@ -231,7 +231,7 @@ const BlochSphere = () => {
 
     // Bloch vector arrow head
     const arrowHead = new Three.Mesh(
-      new Three.ConeGeometry(0.08, 0.25, 16),
+      new Three.ConeGeometry(0.05, 0.2, 16),
       new Three.MeshBasicMaterial({ color: 0xffc300 })
     );
     arrowHead.position.set(0, 0, 0);
