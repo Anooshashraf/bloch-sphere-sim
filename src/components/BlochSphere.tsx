@@ -282,7 +282,7 @@ const BlochSphere = () => {
     blochVector.add(arrowHead);
 
     // Basis state labels
-    const labelDistance = 0.8;
+    const labelDistance = 0.7;
     const labels = [
       {
         text: "|0⟩",
