@@ -24,7 +24,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning>{children}</body>
+      <body>
+        <div className="bg-blur" />
+        {children}
+      </body>
     </html>
   );
 }
