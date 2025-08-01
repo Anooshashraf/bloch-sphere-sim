@@ -36,8 +36,8 @@ body {
   z-index: -1;
   background: url('/Quantum-bg.jpg') no-repeat center center fixed;
   background-size: cover;
-  filter: blur(9px) brightness(0.7);
-  opacity: 0.8;
+  filter: blur(6px) brightness(0.9) contrast(1.1);
+  opacity: 1;
   pointer-events: none;
 }
 
