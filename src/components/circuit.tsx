@@ -332,6 +332,108 @@ export default function Circuit() {
         All major gates: Pauli-X, Y, Z, Hadamard, Phase, T, CNOT, Toffoli, SWAP,
         Identity.
       </div>
+      <div
+        style={{
+          display: "flex",
+          gap: 18,
+          justifyContent: "center",
+          alignItems: "stretch",
+          marginTop: 24,
+          flexWrap: "wrap",
+        }}
+      >
+        {/* Gate Effects */}
+        <div
+          style={{
+            background: "linear-gradient(120deg, #232b3a 80%, #2d3750 100%)",
+            borderRadius: 12,
+            padding: "18px 22px",
+            color: "#fff",
+            fontSize: 15,
+            lineHeight: 1.7,
+            minWidth: 260,
+            flex: "1 1 260px",
+            maxWidth: 340,
+            border: "2px solid #4c6cff",
+            boxShadow: "0 2px 8px #4c6cff22",
+          }}
+        >
+          <strong style={{ color: "#4c6cff" }}>Gate Effects:</strong>
+          <ul style={{ margin: "10px 0 0 18px", padding: 0 }}>
+            <li>
+              <b style={{ color: "#ffc300" }}>X (Pauli-X):</b> Flips the qubit
+              state (like a NOT gate).
+            </li>
+            <li>
+              <b style={{ color: "#ffc300" }}>Y, Z (Pauli-Y, Pauli-Z):</b>{" "}
+              Rotate the qubit around Y or Z axis on the Bloch sphere.
+            </li>
+            <li>
+              <b style={{ color: "#ffc300" }}>H (Hadamard):</b> Puts the qubit
+              into superposition.
+            </li>
+            <li>
+              <b style={{ color: "#ffc300" }}>S, T (Phase, T):</b> Add a phase
+              to the qubit state.
+            </li>
+            <li>
+              <b style={{ color: "#ffc300" }}>CX (CNOT):</b> Flips the target
+              qubit if the control qubit is 1.
+            </li>
+            <li>
+              <b style={{ color: "#ffc300" }}>CCX (Toffoli):</b> Flips the
+              target qubit if both controls are 1.
+            </li>
+            <li>
+              <b style={{ color: "#ffc300" }}>SW (SWAP):</b> Swaps the states of
+              two qubits.
+            </li>
+            <li>
+              <b style={{ color: "#ffc300" }}>I (Identity):</b> Does not change
+              the qubit state.
+            </li>
+          </ul>
+        </div>
+        {/* Manufacturing Notes */}
+        <div
+          style={{
+            background: "linear-gradient(120deg, #2d2a1a 80%, #3a320f 100%)",
+            borderRadius: 12,
+            padding: "18px 22px",
+            color: "#fff",
+            fontSize: 15,
+            lineHeight: 1.7,
+            minWidth: 260,
+            flex: "1 1 260px",
+            maxWidth: 340,
+            border: "2px solid #ffc300",
+            boxShadow: "0 2px 8px #ffc30022",
+          }}
+        >
+          <strong style={{ color: "#ffc300" }}>Manufacturing Notes:</strong>
+          <ul style={{ margin: "10px 0 0 18px", padding: 0 }}>
+            <li>
+              Physical quantum circuits are built using superconducting qubits,
+              trapped ions, or photonic systems.
+            </li>
+            <li>
+              Each gate is implemented via precise control pulses or laser
+              operations.
+            </li>
+            <li>
+              Layout and connectivity are limited by hardware architecture.
+            </li>
+            <li>
+              Noise and decoherence are major challenges; error correction is
+              essential.
+            </li>
+            <li>
+              Manufacturing requires ultra-low temperatures and advanced
+              nanofabrication.
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }
