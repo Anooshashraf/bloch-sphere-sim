@@ -39,7 +39,7 @@ export const BlochSphereNoSSR = dynamic(
   () => import("./BlochSphere").then((mod) => mod.default),
   {
     ssr: false,
-    loading: () => <div>Loading Bloch Sphere...</div>,
+    loading: () => <div></div>,
   }
 );
 
@@ -50,7 +50,7 @@ export const CircuitNoSSR = dynamic(
   () => import("./circuit").then((mod) => mod.default),
   {
     ssr: false,
-    loading: () => <div>Loading Circuit...</div>,
+    loading: () => <div></div>,
   }
 );
 

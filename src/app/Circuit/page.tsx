@@ -1,12 +1,12 @@
 import NavigationBar from "@/components/NavigationBar";
-import ClientOnly, { BlochSphereNoSSR } from "@/components/ClientOnly";
+import ClientOnly, { CircuitNoSSR } from "@/components/ClientOnly";
 
-export default function BlochSpherePage() {
+export default function CircuitPage() {
   return (
     <>
       <NavigationBar />
       <ClientOnly>
-        <BlochSphereNoSSR />
+        <CircuitNoSSR />
       </ClientOnly>
     </>
   );
