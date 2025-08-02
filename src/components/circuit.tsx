@@ -93,8 +93,361 @@ export default function Circuit() {
     marginRight: 12,
   };
 
+  // return (
+  //   <div style={cardStyle}>
+  //     <h2 style={{ textAlign: "center", letterSpacing: 1, marginBottom: 12 }}>
+  //       <span style={{ color: "#4c6cff" }}>Quantum Circuit Designer</span>
+  //     </h2>
+  //     <div
+  //       style={{
+  //         textAlign: "center",
+  //         color: "#aaa",
+  //         fontSize: 16,
+  //         marginBottom: 16,
+  //       }}
+  //     >
+  //       Click a gate, then click an empty slot to place it. Click a gate in the
+  //       circuit to remove it.
+  //     </div>
+
+  //     {/* Gate Palette */}
+  //     <div
+  //       style={{
+  //         display: "flex",
+  //         gap: 12,
+  //         flexWrap: "wrap",
+  //         justifyContent: "center",
+  //         marginBottom: 24,
+  //       }}
+  //     >
+  //       {GATE_PALETTE.map((gate) => (
+  //         <div
+  //           key={gate.label}
+  //           title={gate.name}
+  //           draggable
+  //           onDragStart={() => setDraggedGate(gate.label)}
+  //           onDragEnd={() => setDraggedGate(null)}
+  //           onClick={() => setSelectedGate(gate.label)}
+  //           style={{
+  //             width: 44,
+  //             height: 44,
+  //             background:
+  //               selectedGate === gate.label || draggedGate === gate.label
+  //                 ? "linear-gradient(90deg, #ffc300 0%, #ff4c4c 100%)"
+  //                 : "linear-gradient(90deg, #232b3a 60%, #181c24 100%)",
+  //             border:
+  //               selectedGate === gate.label || draggedGate === gate.label
+  //                 ? "2px solid #ffc300"
+  //                 : "2px solid #4c6cff",
+  //             borderRadius: 8,
+  //             color:
+  //               selectedGate === gate.label || draggedGate === gate.label
+  //                 ? "#232b3a"
+  //                 : "#ffc300",
+  //             fontWeight: 700,
+  //             fontSize: 18,
+  //             display: "flex",
+  //             alignItems: "center",
+  //             justifyContent: "center",
+  //             cursor: "grab",
+  //             boxShadow: "0 2px 8px #0006",
+  //             userSelect: "none",
+  //             transition: "all 0.2s",
+  //             overflow: "hidden",
+  //             textOverflow: "ellipsis",
+  //             whiteSpace: "nowrap",
+  //           }}
+  //         >
+  //           {gate.label}
+  //         </div>
+  //       ))}
+  //     </div>
+
+  //     {/* Circuit Controls */}
+  //     <div
+  //       style={{
+  //         display: "flex",
+  //         justifyContent: "center",
+  //         gap: 12,
+  //         marginBottom: 18,
+  //       }}
+  //     >
+  //       <button style={buttonStyle} onClick={addQubit}>
+  //         + Qubit
+  //       </button>
+  //       <button style={buttonStyle} onClick={removeQubit}>
+  //         - Qubit
+  //       </button>
+  //       <button style={buttonStyle} onClick={addColumn}>
+  //         + Step
+  //       </button>
+  //       <button style={buttonStyle} onClick={removeColumn}>
+  //         - Step
+  //       </button>
+  //     </div>
+
+  //     {/* Demo Circuit */}
+  //     <div
+  //       style={{
+  //         background: "#232b3a",
+  //         borderRadius: 12,
+  //         padding: 24,
+  //         margin: "0 auto 16px auto",
+  //         minHeight: 120,
+  //         boxShadow: "0 2px 8px #0004",
+  //         overflowX: "auto",
+  //       }}
+  //     >
+  //       {circuit.map((wire, i) => (
+  //         <div
+  //           key={i}
+  //           style={{
+  //             display: "flex",
+  //             alignItems: "center",
+  //             marginBottom: 18,
+  //             minHeight: 44,
+  //           }}
+  //         >
+  //           <span
+  //             style={{
+  //               color: "#aaa",
+  //               fontWeight: 600,
+  //               marginRight: 10,
+  //               fontSize: 16,
+  //               minWidth: 32,
+  //               display: "inline-block",
+  //             }}
+  //           >
+  //             q{i}
+  //           </span>
+  //           <div
+  //             style={{
+  //               display: "flex",
+  //               alignItems: "center",
+  //               flex: 1,
+  //               position: "relative",
+  //             }}
+  //           >
+  //             {/* Wire line */}
+  //             <div
+  //               style={{
+  //                 position: "absolute",
+  //                 left: 0,
+  //                 right: 0,
+  //                 top: "50%",
+  //                 height: 4,
+  //                 background: "#444",
+  //                 borderRadius: 2,
+  //                 zIndex: 0,
+  //               }}
+  //             />
+  //             {/* Gates */}
+  //             <div
+  //               style={{ display: "flex", gap: 8, width: "100%", zIndex: 1 }}
+  //             >
+  //               {wire.map((gate, j) =>
+  //                 gate ? (
+  //                   <div
+  //                     key={j}
+  //                     style={{
+  //                       width: 44,
+  //                       height: 44,
+  //                       background:
+  //                         "linear-gradient(90deg, #ffc300 0%, #ff4c4c 100%)",
+  //                       border: "2px solid #fff",
+  //                       borderRadius: 8,
+  //                       color: "#232b3a",
+  //                       fontWeight: 500,
+  //                       fontSize: 18,
+  //                       display: "flex",
+  //                       alignItems: "center",
+  //                       justifyContent: "center",
+  //                       boxShadow: "0 2px 8px #0006",
+  //                       transition: "box-shadow 0.2s, border 0.2s",
+  //                       cursor: "pointer",
+  //                       overflow: "hidden",
+  //                       textOverflow: "ellipsis",
+  //                       whiteSpace: "nowrap",
+  //                     }}
+  //                     title={
+  //                       GATE_PALETTE.find((g) => g.label === gate)?.name || gate
+  //                     }
+  //                     onClick={() => removeGate(i, j)}
+  //                     onMouseEnter={(e) => {
+  //                       (e.currentTarget as HTMLDivElement).style.boxShadow =
+  //                         "0 0 0 4px #ffc30088";
+  //                       (e.currentTarget as HTMLDivElement).style.border =
+  //                         "2px solid #ffc300";
+  //                     }}
+  //                     onMouseLeave={(e) => {
+  //                       (e.currentTarget as HTMLDivElement).style.boxShadow =
+  //                         "0 2px 8px #0006";
+  //                       (e.currentTarget as HTMLDivElement).style.border =
+  //                         "2px solid #fff";
+  //                     }}
+  //                   >
+  //                     {gate}
+  //                   </div>
+  //                 ) : (
+  //                   <div
+  //                     key={j}
+  //                     style={{
+  //                       width: 44,
+  //                       height: 44,
+  //                       background: draggedGate
+  //                         ? "#333"
+  //                         : "rgba(255,255,255,0.04)",
+  //                       border: draggedGate
+  //                         ? "2px dashed #ffc300"
+  //                         : "1px dashed #4c6cff",
+  //                       borderRadius: 8,
+  //                       transition: "border 0.2s, background 0.2s",
+  //                       cursor: draggedGate ? "pointer" : "default",
+  //                     }}
+  //                     onClick={() => selectedGate && placeGate(i, j)}
+  //                     onDragOver={(e) => {
+  //                       e.preventDefault();
+  //                     }}
+  //                     onDrop={() => {
+  //                       if (draggedGate) {
+  //                         setCircuit((prev) =>
+  //                           prev.map((wire, wi) =>
+  //                             wire.map((g, ji) =>
+  //                               wi === i && ji === j ? draggedGate : g
+  //                             )
+  //                           )
+  //                         );
+  //                         setDraggedGate(null);
+  //                       }
+  //                     }}
+  //                   />
+  //                 )
+  //               )}
+  //             </div>
+  //           </div>
+  //         </div>
+  //       ))}
+  //     </div>
+  //     <div style={{ textAlign: "center", color: "#aaa", fontSize: 14 }}>
+  //       All major gates: Pauli-X, Y, Z, Hadamard, Phase, T, CNOT, Toffoli, SWAP,
+  //       Identity.
+  //     </div>
+  //     <div
+  //       style={{
+  //         display: "flex",
+  //         gap: 18,
+  //         justifyContent: "center",
+  //         alignItems: "stretch",
+  //         marginTop: 24,
+  //         flexWrap: "wrap",
+  //       }}
+  //     >
+  //       {/* Gate Effects */}
+  //       <div
+  //         style={{
+  //           background: "linear-gradient(120deg, #232b3a 80%, #2d3750 100%)",
+  //           borderRadius: 12,
+  //           padding: "18px 22px",
+  //           color: "#fff",
+  //           fontSize: 15,
+  //           lineHeight: 1.7,
+  //           minWidth: 260,
+  //           flex: "1 1 260px",
+  //           maxWidth: 340,
+  //           border: "2px solid #4c6cff",
+  //           boxShadow: "0 2px 8px #4c6cff22",
+  //         }}
+  //       >
+  //         <strong style={{ color: "#4c6cff" }}>Gate Effects:</strong>
+  //         <ul style={{ margin: "10px 0 0 18px", padding: 0 }}>
+  //           <li>
+  //             <b style={{ color: "#ffc300" }}>X (Pauli-X):</b> Flips the qubit
+  //             state (like a NOT gate).
+  //           </li>
+  //           <li>
+  //             <b style={{ color: "#ffc300" }}>Y, Z (Pauli-Y, Pauli-Z):</b>{" "}
+  //             Rotate the qubit around Y or Z axis on the Bloch sphere.
+  //           </li>
+  //           <li>
+  //             <b style={{ color: "#ffc300" }}>H (Hadamard):</b> Puts the qubit
+  //             into superposition.
+  //           </li>
+  //           <li>
+  //             <b style={{ color: "#ffc300" }}>S, T (Phase, T):</b> Add a phase
+  //             to the qubit state.
+  //           </li>
+  //           <li>
+  //             <b style={{ color: "#ffc300" }}>CX (CNOT):</b> Flips the target
+  //             qubit if the control qubit is 1.
+  //           </li>
+  //           <li>
+  //             <b style={{ color: "#ffc300" }}>CCX (Toffoli):</b> Flips the
+  //             target qubit if both controls are 1.
+  //           </li>
+  //           <li>
+  //             <b style={{ color: "#ffc300" }}>SW (SWAP):</b> Swaps the states of
+  //             two qubits.
+  //           </li>
+  //           <li>
+  //             <b style={{ color: "#ffc300" }}>I (Identity):</b> Does not change
+  //             the qubit state.
+  //           </li>
+  //         </ul>
+  //       </div>
+  //       {/* Manufacturing Notes */}
+  //       <div
+  //         style={{
+  //           background: "linear-gradient(120deg, #2d2a1a 80%, #3a320f 100%)",
+  //           borderRadius: 12,
+  //           padding: "18px 22px",
+  //           color: "#fff",
+  //           fontSize: 15,
+  //           lineHeight: 1.7,
+  //           minWidth: 260,
+  //           flex: "1 1 260px",
+  //           maxWidth: 340,
+  //           border: "2px solid #ffc300",
+  //           boxShadow: "0 2px 8px #ffc30022",
+  //         }}
+  //       >
+  //         <strong style={{ color: "#ffc300" }}>Manufacturing Notes:</strong>
+  //         <ul style={{ margin: "10px 0 0 18px", padding: 0 }}>
+  //           <li>
+  //             Physical quantum circuits are built using superconducting qubits,
+  //             trapped ions, or photonic systems.
+  //           </li>
+  //           <li>
+  //             Each gate is implemented via precise control pulses or laser
+  //             operations.
+  //           </li>
+  //           <li>
+  //             Layout and connectivity are limited by hardware architecture.
+  //           </li>
+  //           <li>
+  //             Noise and decoherence are major challenges; error correction is
+  //             essential.
+  //           </li>
+  //           <li>
+  //             Manufacturing requires ultra-low temperatures and advanced
+  //             nanofabrication.
+  //           </li>
+  //         </ul>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
+
+  // ...existing code...
+
   return (
-    <div style={cardStyle}>
+    <div
+      style={{
+        ...cardStyle,
+        width: "100%",
+        maxWidth: 700,
+        boxSizing: "border-box",
+      }}
+    >
       <h2 style={{ textAlign: "center", letterSpacing: 1, marginBottom: 12 }}>
         <span style={{ color: "#4c6cff" }}>Quantum Circuit Designer</span>
       </h2>
@@ -170,6 +523,7 @@ export default function Circuit() {
           justifyContent: "center",
           gap: 12,
           marginBottom: 18,
+          flexWrap: "wrap",
         }}
       >
         <button style={buttonStyle} onClick={addQubit}>
@@ -196,6 +550,8 @@ export default function Circuit() {
           minHeight: 120,
           boxShadow: "0 2px 8px #0004",
           overflowX: "auto",
+          width: "100%",
+          maxWidth: "100vw",
         }}
       >
         {circuit.map((wire, i) => (
@@ -226,6 +582,7 @@ export default function Circuit() {
                 alignItems: "center",
                 flex: 1,
                 position: "relative",
+                minWidth: 0,
               }}
             >
               {/* Wire line */}
@@ -243,7 +600,14 @@ export default function Circuit() {
               />
               {/* Gates */}
               <div
-                style={{ display: "flex", gap: 8, width: "100%", zIndex: 1 }}
+                style={{
+                  display: "flex",
+                  gap: 8,
+                  width: "100%",
+                  zIndex: 1,
+                  minWidth: 0,
+                  overflowX: "auto",
+                }}
               >
                 {wire.map((gate, j) =>
                   gate ? (
@@ -332,6 +696,7 @@ export default function Circuit() {
         All major gates: Pauli-X, Y, Z, Hadamard, Phase, T, CNOT, Toffoli, SWAP,
         Identity.
       </div>
+      {/* Responsive Notes Section */}
       <div
         style={{
           display: "flex",
@@ -351,10 +716,11 @@ export default function Circuit() {
             color: "#fff",
             fontSize: 15,
             lineHeight: 1.7,
-            minWidth: 260,
-            flex: "1 1 260px",
+            minWidth: 220,
+            flex: "1 1 220px",
             maxWidth: 340,
             border: "2px solid #4c6cff",
+            boxSizing: "border-box",
             boxShadow: "0 2px 8px #4c6cff22",
           }}
         >
@@ -403,10 +769,11 @@ export default function Circuit() {
             color: "#fff",
             fontSize: 15,
             lineHeight: 1.7,
-            minWidth: 260,
-            flex: "1 1 260px",
+            minWidth: 220,
+            flex: "1 1 220px",
             maxWidth: 340,
             border: "2px solid #ffc300",
+            boxSizing: "border-box",
             boxShadow: "0 2px 8px #ffc30022",
           }}
         >
@@ -434,6 +801,27 @@ export default function Circuit() {
           </ul>
         </div>
       </div>
+      {/* Responsive styles */}
+      <style>{`
+        @media (max-width: 900px) {
+          .circuit-notes {
+            flex-direction: column !important;
+            gap: 12px !important;
+          }
+        }
+        @media (max-width: 600px) {
+          .circuit-card {
+            padding: 10px !important;
+            font-size: 14px !important;
+          }
+          .circuit-notes > div {
+            padding: 12px 8px !important;
+            font-size: 13px !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

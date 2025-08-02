@@ -404,7 +404,6 @@ const BlochSphere = () => {
     };
     animationFrameId.current = requestAnimationFrame(animate);
 
-    // Cleanup
     return () => {
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current);
@@ -660,5 +659,57 @@ const BlochSphere = () => {
     </div>
   );
 };
+
+//   return (
+//     <div style={cardStyle} className="bloch-card">
+//       <h2
+//         style={{
+//           textAlign: "center",
+//           letterSpacing: 1,
+//           marginBottom: "24px",
+//           background: "linear-gradient(90deg, #0077ff, #ffc300)",
+//           WebkitBackgroundClip: "text",
+//           backgroundClip: "text",
+//           color: "transparent",
+//         }}
+//       >
+//         Bloch Sphere Simulator
+//       </h2>
+
+//       <div
+//         style={{
+//           display: "flex",
+//           gap: "24px",
+//           flexDirection: isMobile ? "column" : "row",
+//           width: "100%",
+//         }}
+//         className="bloch-main"
+//       >
+//         {/* Visualization Column */}
+//         <div style={{ flex: 1, minWidth: 0 }}>
+//           <div style={containerStyle} className="bloch-3d-container">
+//             <div ref={mountRef} style={canvasStyle} />
+//           </div>
+//           {/* ...rest of controls... */}
+//           {/* (keep your controls and buttons as they are) */}
+//         </div>
+
+//         {/* Notes Column */}
+//         <div
+//           style={{
+//             flex: 1,
+//             padding: "16px",
+//             background: "rgba(30, 35, 45, 0.8)",
+//             borderRadius: "12px",
+//             overflowY: "auto",
+//             maxHeight: "600px",
+//             minWidth: 0,
+//           }}
+//           className="bloch-notes"
+//         >
+//           {/* ...notes content as before... */}
+//         </div>
+//       </div>
+// };
 
 export default BlochSphere;
