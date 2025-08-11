@@ -1321,6 +1321,50 @@ export default function Circuit() {
             </li>
           </ul>
         </div>
+        {/* Manufacturing Notes */}
+        <div
+          style={{
+            background: "linear-gradient(120deg, #2d2a1a 80%, #3a320f 100%)",
+            borderRadius: 12,
+            padding: "18px 22px",
+            color: "#fff",
+            fontSize: 15,
+            lineHeight: 1.7,
+            minWidth: 220,
+            flex: "1 1 220px",
+            maxWidth: 340,
+            border: "2px solid #ffc300",
+            boxSizing: "border-box",
+            boxShadow: "0 2px 8px #ffc30022",
+          }}
+        >
+          <strong style={{ color: "#ffc300" }}>Manufacturing Notes:</strong>
+          <ul style={{ margin: "10px 0 0 18px", padding: 0 }}>
+            <li>
+              Physical quantum circuits are built using superconducting qubits,
+              trapped ions, or photonic systems.
+            </li>
+            <li>
+              Each gate is implemented via precise control pulses or laser
+              operations.
+            </li>
+            <li>
+              Layout and connectivity are limited by hardware architecture.
+            </li>
+            <li>
+              Noise and decoherence are major challenges; error correction is
+              essential.
+            </li>
+            <li>
+              Manufacturing requires ultra-low temperatures and advanced
+              nanofabrication.
+            </li>
+            <li>
+              Measurement is typically done via dispersive readout in
+              superconducting qubits.
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );
