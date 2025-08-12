@@ -1303,6 +1303,23 @@ const BlochSphere: React.FC = () => {
               <li>Click basis state buttons for quick configuration.</li>
             </ul>
           </div>
+
+          <div>
+            <h4 style={{ color: "#4c6cff", marginBottom: 8 }}>
+              Pure vs Mixed States
+            </h4>
+            <ul style={{ paddingLeft: 16, color: "#ddd", lineHeight: 1.6 }}>
+              <li>
+                <strong>Pure States: </strong>The Bloch sphere represents pure
+                states (points on the surface)
+              </li>
+              <li>
+                <strong>Mixed States: </strong> (statistical mixtures) lie
+                inside the sphere, with the center representing the maximally
+                mixed state (50% |0⟩, 50% |1⟩).
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
 
