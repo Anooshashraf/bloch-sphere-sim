@@ -630,7 +630,7 @@ const BlochSphere: React.FC = () => {
             </ul>
           </div>
 
-          <div>
+          <div style={{ marginBottom: 16 }}>
             <h4 style={{ color: "#4c6cff", marginBottom: 8 }}>
               Interactivity Guide
             </h4>
@@ -642,7 +642,7 @@ const BlochSphere: React.FC = () => {
             </ul>
           </div>
 
-          <div>
+          <div style={{ marginBottom: 16 }}>
             <h4 style={{ color: "#4c6cff", marginBottom: 8 }}>
               Pure vs Mixed States
             </h4>
@@ -655,6 +655,29 @@ const BlochSphere: React.FC = () => {
                 <strong>Mixed States: </strong> (statistical mixtures) lie
                 inside the sphere, with the center representing the maximally
                 mixed state (50% |0⟩, 50% |1⟩).
+              </li>
+            </ul>
+          </div>
+
+          <div style={{ marginBottom: 16 }}>
+            <h4 style={{ color: "#4c6cff", marginBottom: 8 }}>
+              Pauli Matrices & Axes
+            </h4>
+            <h5 style={{ color: "#ddd", marginBottom: 8 }}>
+              The X, Y, and Z axes correspond to the Pauli matrices (σₓ, σᵧ,
+              σ_z)
+            </h5>
+            <ul style={{ paddingLeft: 16, color: "#ddd", lineHeight: 1.6 }}>
+              <li>
+                <strong>Z-axis: </strong>Measures in the (|0⟩, |1⟩) basis.
+              </li>
+              <li>
+                <strong>X-axis: </strong>Measures in the (|+⟩, |-⟩) basis (where
+                |±⟩ = (|0⟩ ± |1⟩)/√2).
+              </li>
+              <li>
+                <strong>Y-axis: </strong>Measures in the (|i⟩, |-i⟩) basis
+                (where |i⟩ = (|0⟩ + i|1⟩)/√2).
               </li>
             </ul>
           </div>
