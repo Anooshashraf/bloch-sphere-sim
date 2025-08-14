@@ -288,48 +288,44 @@ const MainAppSection = () => {
           <aside className="w-64 bg-[#0f1116] border-r border-[#232339] p-4">
             <div className="text-sm text-[#aeb6e6] mb-4">Quantum Tools</div>
 
-            <nav className="flex flex-col gap-2">
-              <button
-                className={`text-left px-3 py-2 rounded ${
-                  activePanel === "bloch"
-                    ? "bg-[#1b2446]"
-                    : "hover:bg-[#121428]"
-                }`}
-                onClick={() => setActivePanel("bloch")}
-              >
-                Bloch Sphere
-              </button>
-              <button
-                className={`text-left px-3 py-2 rounded ${
-                  activePanel === "circuit"
-                    ? "bg-[#1b2446]"
-                    : "hover:bg-[#121428]"
-                }`}
-                onClick={() => setActivePanel("circuit")}
-              >
-                Quantum Circuit
-              </button>
-              <button
-                className={`text-left px-3 py-2 rounded ${
-                  activePanel === "algorithms"
-                    ? "bg-[#1b2446]"
-                    : "hover:bg-[#121428]"
-                }`}
-                onClick={() => setActivePanel("algorithms")}
-              >
-                Algorithms Library
-              </button>
-              <button
-                className={`text-left px-3 py-2 rounded ${
-                  activePanel === "results"
-                    ? "bg-[#1b2446]"
-                    : "hover:bg-[#121428]"
-                }`}
-                onClick={() => setActivePanel("results")}
-              >
-                Results
-              </button>
-            </nav>
+            <button
+              className={`text-left px-3 py-2 rounded ${
+                activePanel === "bloch" ? "bg-[#1b2446]" : "hover:bg-[#121428]"
+              }`}
+              onClick={() => setActivePanel("bloch")}
+            >
+              Bloch Sphere
+            </button>
+            <button
+              className={`text-left px-3 py-2 rounded ${
+                activePanel === "circuit"
+                  ? "bg-[#1b2446]"
+                  : "hover:bg-[#121428]"
+              }`}
+              onClick={() => setActivePanel("circuit")}
+            >
+              Quantum Circuit
+            </button>
+            <button
+              className={`text-left px-3 py-2 rounded ${
+                activePanel === "algorithms"
+                  ? "bg-[#1b2446]"
+                  : "hover:bg-[#121428]"
+              }`}
+              onClick={() => setActivePanel("algorithms")}
+            >
+              Algorithms Library
+            </button>
+            <button
+              className={`text-left px-3 py-2 rounded ${
+                activePanel === "results"
+                  ? "bg-[#1b2446]"
+                  : "hover:bg-[#121428]"
+              }`}
+              onClick={() => setActivePanel("results")}
+            >
+              Results
+            </button>
 
             <div className="mt-6 text-sm text-[#9aa0c7]">
               Examples

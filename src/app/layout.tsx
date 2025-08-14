@@ -27,13 +27,13 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className="bg-blur" />
-        <nav className="flex gap-4 p-4 bg-black text-white">
+        {/* <nav className="flex gap-4 p-4 bg-black text-white">
           <Link href="/">Home</Link>
           <Link href="/blochsphere">Bloch Sphere</Link>
           <Link href="/circuit">Circuit</Link>
           <Link href="/algorithms">Algorithms</Link>
           <Link href="/results">Results</Link>
-        </nav>
+        </nav> */}
         {children}
       </body>
     </html>
