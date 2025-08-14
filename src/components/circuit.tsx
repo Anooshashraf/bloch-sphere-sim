@@ -13,7 +13,7 @@ const GATE_PALETTE = [
   { label: "CCX", name: "Toffoli" },
   { label: "SW", name: "SWAP" },
   { label: "I", name: "Identity" },
-  { label: "M", name: "Measure" }, // Added measurement gate
+  { label: "M", name: "Measure" },
 ];
 
 const INIT_CIRCUIT = [

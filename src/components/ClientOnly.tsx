@@ -1,52 +1,3 @@
-// "use client";
-
-// import dynamic from "next/dynamic";
-// import { FC, ReactNode } from "react";
-
-// interface ClientOnlyProps {
-//   children: ReactNode;
-// }
-
-// /**
-//  * ClientOnly component that ensures children are only rendered on the client side.
-//  * Useful for components that depend on browser APIs or should not be server-rendered.
-//  */
-// const ClientOnly: FC<ClientOnlyProps> = ({ children }) => {
-//   return <>{children}</>;
-// };
-
-// /**
-//  * Dynamically imported BlochSphere component with SSR disabled
-//  */
-// export const BlochSphereNoSSR = dynamic(
-//   () => import("./BlochSphere").then((mod) => mod.default),
-//   {
-//     ssr: false,
-//     loading: () => <div></div>,
-//   }
-// );
-
-// /**
-//  * Dynamically imported Circuit component with SSR disabled
-//  */
-// export const CircuitNoSSR = dynamic(
-//   () => import("./circuit").then((mod) => mod.default),
-//   {
-//     ssr: false,
-//     loading: () => <div></div>,
-//   }
-// );
-// export const AlgorithmsNoSSR = dynamic(
-//   () => import("./Algorithms").then((mod) => mod.default),
-//   {
-//     ssr: false,
-//     loading: () => <div></div>,
-//   }
-// );
-
-// export default ClientOnly;
-
-// components/ClientOnly.tsx
 "use client";
 
 import dynamic from "next/dynamic";
@@ -56,17 +7,10 @@ interface ClientOnlyProps {
   children: ReactNode;
 }
 
-/**
- * ClientOnly component that ensures children are only rendered on the client side.
- */
 const ClientOnly: FC<ClientOnlyProps> = ({ children }) => {
   return <>{children}</>;
 };
 
-/**
- * Props for the components imported dynamically.
- * Adjust these if your components accept different props.
- */
 export interface CircuitProps {
   onRun?: (result: any) => void;
   // add other props if Circuit accepts them
@@ -104,9 +48,6 @@ export const CircuitNoSSR = dynamic(
   }
 ) as unknown as React.ComponentType<CircuitProps>;
 
-/**
- * Dynamically imported Algorithms component with SSR disabled
- */
 export const AlgorithmsNoSSR = dynamic(
   () => import("./Algorithms").then((mod) => mod.default),
   {

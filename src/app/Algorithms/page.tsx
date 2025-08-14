@@ -1,4 +1,3 @@
-import NavigationBar from "@/components/NavigationBar";
 import ClientOnly, { AlgorithmsNoSSR } from "@/components/ClientOnly";
 
 export default function AlgorithmsPage() {
