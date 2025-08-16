@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +25,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning>{children}</body>
+      <body>
+        <div className="bg-blur" />
+        {/* <nav className="flex gap-4 p-4 bg-black text-white">
+          <Link href="/">Home</Link>
+          <Link href="/blochsphere">Bloch Sphere</Link>
+          <Link href="/circuit">Circuit</Link>
+          <Link href="/algorithms">Algorithms</Link>
+          <Link href="/results">Results</Link>
+        </nav> */}
+        {children}
+      </body>
     </html>
   );
 }

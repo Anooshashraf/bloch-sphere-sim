@@ -11,8 +11,9 @@ const GATE_PALETTE = [
   { label: "T", name: "T" },
   { label: "CX", name: "CNOT" },
   { label: "CCX", name: "Toffoli" },
-  { label: "SW", name: "SWAP" }, // <--- Use "SW" for the box, "SWAP" for tooltip
+  { label: "SW", name: "SWAP" },
   { label: "I", name: "Identity" },
+  { label: "M", name: "Measure" },
 ];
 
 const INIT_CIRCUIT = [
@@ -24,30 +25,33 @@ const INIT_CIRCUIT = [
 export default function Circuit() {
   const [circuit, setCircuit] = useState(INIT_CIRCUIT);
   const [selectedGate, setSelectedGate] = useState<string | null>(null);
-  // For drag-and-drop
   const [draggedGate, setDraggedGate] = useState<string | null>(null);
-  // Add a qubit (wire)
+  const [initialStates, setInitialStates] = useState<string[]>(
+    Array(circuit.length).fill("|0⟩")
+  );
+  const [showEquations, setShowEquations] = useState(true);
+
   const addQubit = () => {
     setCircuit([...circuit, Array(circuit[0]?.length || 4).fill("")]);
+    setInitialStates([...initialStates, "|0⟩"]);
   };
 
-  // Remove last qubit
   const removeQubit = () => {
-    if (circuit.length > 1) setCircuit(circuit.slice(0, -1));
+    if (circuit.length > 1) {
+      setCircuit(circuit.slice(0, -1));
+      setInitialStates(initialStates.slice(0, -1));
+    }
   };
 
-  // Add a column (time step)
   const addColumn = () => {
     setCircuit(circuit.map((wire) => [...wire, ""]));
   };
 
-  // Remove last column
   const removeColumn = () => {
     if (circuit[0].length > 1)
       setCircuit(circuit.map((wire) => wire.slice(0, -1)));
   };
 
-  // Place gate in slot
   const placeGate = (qi: number, gj: number) => {
     if (!selectedGate) return;
     setCircuit((prev) =>
@@ -58,7 +62,6 @@ export default function Circuit() {
     setSelectedGate(null);
   };
 
-  // Remove gate from slot
   const removeGate = (qi: number, gj: number) => {
     setCircuit((prev) =>
       prev.map((wire, i) =>
@@ -67,16 +70,44 @@ export default function Circuit() {
     );
   };
 
-  // UI styles
+  const updateInitialState = (index: number, value: string) => {
+    const newStates = [...initialStates];
+    newStates[index] = value;
+    setInitialStates(newStates);
+  };
+
+  const calculateFinalState = () => {
+    // This is a simplified representation - in a real app you'd use a quantum simulator
+    let finalStates = initialStates.map((state) => state);
+
+    // Very basic state transformation simulation
+    circuit.forEach((wire, qi) => {
+      wire.forEach((gate) => {
+        if (gate === "H") {
+          finalStates[qi] = `(${finalStates[qi].replace("⟩", "⟩ + |1⟩")})/√2`;
+        } else if (gate === "X") {
+          finalStates[qi] = finalStates[qi].replace("0", "1").replace("1", "0");
+        } else if (gate === "M") {
+          finalStates[qi] = `Measured: ${Math.random() > 0.5 ? "|1⟩" : "|0⟩"}`;
+        }
+        // Add more gate transformations as needed
+      });
+    });
+
+    return finalStates;
+  };
+
   const cardStyle: React.CSSProperties = {
     background: "rgba(24,28,36,0.98)",
     borderRadius: 18,
     boxShadow: "0 4px 32px #0008",
     padding: 24,
     color: "#fff",
-    width: 700,
+    width: "100%",
+    maxWidth: 700,
     margin: "32px auto",
     fontFamily: "'Segoe UI', Arial, sans-serif",
+    boxSizing: "border-box",
   };
 
   const buttonStyle: React.CSSProperties = {
@@ -92,6 +123,15 @@ export default function Circuit() {
     transition: "background 0.2s, transform 0.2s",
     marginRight: 12,
   };
+
+  const toggleButtonStyle: React.CSSProperties = {
+    ...buttonStyle,
+    background: showEquations
+      ? "linear-gradient(90deg, #4c6cff 0%, #0077ff 100%)"
+      : "linear-gradient(90deg, #232b3a 0%, #181c24 100%)",
+  };
+
+  const finalStates = calculateFinalState();
 
   return (
     <div style={cardStyle}>
@@ -109,6 +149,46 @@ export default function Circuit() {
         Click a gate, then click an empty slot to place it. Click a gate in the
         circuit to remove it.
       </div>
+
+      {/* Initial States Input */}
+      {showEquations && (
+        <div
+          style={{
+            background: "#232b3a",
+            borderRadius: 12,
+            padding: "12px 16px",
+            marginBottom: 16,
+            boxShadow: "0 2px 8px #0004",
+          }}
+        >
+          <div style={{ color: "#4c6cff", fontWeight: 600, marginBottom: 8 }}>
+            Initial Qubit States:
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {initialStates.map((state, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center" }}>
+                <span style={{ marginRight: 6, color: "#aaa" }}>q{i}:</span>
+                <select
+                  value={state}
+                  onChange={(e) => updateInitialState(i, e.target.value)}
+                  style={{
+                    background: "#181c24",
+                    color: "#fff",
+                    border: "1px solid #4c6cff",
+                    borderRadius: 6,
+                    padding: "4px 8px",
+                  }}
+                >
+                  <option value="|0⟩">|0⟩</option>
+                  <option value="|1⟩">|1⟩</option>
+                  <option value="|+⟩">|+⟩ (|0⟩ + |1⟩)/√2</option>
+                  <option value="|-⟩">|-⟩ (|0⟩ - |1⟩)/√2</option>
+                </select>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Gate Palette */}
       <div
@@ -170,6 +250,7 @@ export default function Circuit() {
           justifyContent: "center",
           gap: 12,
           marginBottom: 18,
+          flexWrap: "wrap",
         }}
       >
         <button style={buttonStyle} onClick={addQubit}>
@@ -184,6 +265,12 @@ export default function Circuit() {
         <button style={buttonStyle} onClick={removeColumn}>
           - Step
         </button>
+        <button
+          style={toggleButtonStyle}
+          onClick={() => setShowEquations(!showEquations)}
+        >
+          {showEquations ? "Hide States" : "Show States"}
+        </button>
       </div>
 
       {/* Demo Circuit */}
@@ -196,6 +283,8 @@ export default function Circuit() {
           minHeight: 120,
           boxShadow: "0 2px 8px #0004",
           overflowX: "auto",
+          width: "100%",
+          maxWidth: "100vw",
         }}
       >
         {circuit.map((wire, i) => (
@@ -226,6 +315,7 @@ export default function Circuit() {
                 alignItems: "center",
                 flex: 1,
                 position: "relative",
+                minWidth: 0,
               }}
             >
               {/* Wire line */}
@@ -243,7 +333,14 @@ export default function Circuit() {
               />
               {/* Gates */}
               <div
-                style={{ display: "flex", gap: 8, width: "100%", zIndex: 1 }}
+                style={{
+                  display: "flex",
+                  gap: 8,
+                  width: "100%",
+                  zIndex: 1,
+                  minWidth: 0,
+                  overflowX: "auto",
+                }}
               >
                 {wire.map((gate, j) =>
                   gate ? (
@@ -253,7 +350,9 @@ export default function Circuit() {
                         width: 44,
                         height: 44,
                         background:
-                          "linear-gradient(90deg, #ffc300 0%, #ff4c4c 100%)",
+                          gate === "M"
+                            ? "linear-gradient(90deg, #00c853 0%, #64dd17 100%)"
+                            : "linear-gradient(90deg, #ffc300 0%, #ff4c4c 100%)",
                         border: "2px solid #fff",
                         borderRadius: 8,
                         color: "#232b3a",
@@ -328,9 +427,149 @@ export default function Circuit() {
           </div>
         ))}
       </div>
+
+      {/* Final States Display */}
+      {showEquations && (
+        <div
+          style={{
+            background: "#232b3a",
+            borderRadius: 12,
+            padding: "12px 16px",
+            marginBottom: 16,
+            boxShadow: "0 2px 8px #0004",
+          }}
+        >
+          <div style={{ color: "#4c6cff", fontWeight: 600, marginBottom: 8 }}>
+            Final Qubit States:
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {finalStates.map((state, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center" }}>
+                <span style={{ marginRight: 6, color: "#aaa" }}>q{i}:</span>
+                <span style={{ color: "#ffc300" }}>{state}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div style={{ textAlign: "center", color: "#aaa", fontSize: 14 }}>
         All major gates: Pauli-X, Y, Z, Hadamard, Phase, T, CNOT, Toffoli, SWAP,
-        Identity.
+        Identity, Measure.
+      </div>
+
+      {/* Notes Section */}
+      <div
+        style={{
+          display: "flex",
+          gap: 18,
+          justifyContent: "center",
+          alignItems: "stretch",
+          marginTop: 24,
+          flexWrap: "wrap",
+        }}
+      >
+        {/* Gate Effects */}
+        <div
+          style={{
+            background: "linear-gradient(120deg, #232b3a 80%, #2d3750 100%)",
+            borderRadius: 12,
+            padding: "18px 22px",
+            color: "#fff",
+            fontSize: 15,
+            lineHeight: 1.7,
+            minWidth: 220,
+            flex: "1 1 220px",
+            maxWidth: 340,
+            border: "2px solid #4c6cff",
+            boxSizing: "border-box",
+            boxShadow: "0 2px 8px #4c6cff22",
+          }}
+        >
+          <strong style={{ color: "#4c6cff" }}>Gate Effects:</strong>
+          <ul style={{ margin: "10px 0 0 18px", padding: 0 }}>
+            <li>
+              <b style={{ color: "#ffc300" }}>X (Pauli-X):</b> Flips the qubit
+              state (like a NOT gate).
+            </li>
+            <li>
+              <b style={{ color: "#ffc300" }}>Y, Z (Pauli-Y, Pauli-Z):</b>{" "}
+              Rotate the qubit around Y or Z axis on the Bloch sphere.
+            </li>
+            <li>
+              <b style={{ color: "#ffc300" }}>H (Hadamard):</b> Puts the qubit
+              into superposition.
+            </li>
+            <li>
+              <b style={{ color: "#ffc300" }}>S, T (Phase, T):</b> Add a phase
+              to the qubit state.
+            </li>
+            <li>
+              <b style={{ color: "#ffc300" }}>CX (CNOT):</b> Flips the target
+              qubit if the control qubit is 1.
+            </li>
+            <li>
+              <b style={{ color: "#ffc300" }}>CCX (Toffoli):</b> Flips the
+              target qubit if both controls are 1.
+            </li>
+            <li>
+              <b style={{ color: "#ffc300" }}>SW (SWAP):</b> Swaps the states of
+              two qubits.
+            </li>
+            <li>
+              <b style={{ color: "#ffc300" }}>I (Identity):</b> Does not change
+              the qubit state.
+            </li>
+            <li>
+              <b style={{ color: "#00c853" }}>M (Measure):</b> Collapses the
+              qubit state to |0⟩ or |1⟩.
+            </li>
+          </ul>
+        </div>
+        {/* Manufacturing Notes */}
+        <div
+          style={{
+            background: "linear-gradient(120deg, #2d2a1a 80%, #3a320f 100%)",
+            borderRadius: 12,
+            padding: "18px 22px",
+            color: "#fff",
+            fontSize: 15,
+            lineHeight: 1.7,
+            minWidth: 220,
+            flex: "1 1 220px",
+            maxWidth: 340,
+            border: "2px solid #ffc300",
+            boxSizing: "border-box",
+            boxShadow: "0 2px 8px #ffc30022",
+          }}
+        >
+          <strong style={{ color: "#ffc300" }}>Manufacturing Notes:</strong>
+          <ul style={{ margin: "10px 0 0 18px", padding: 0 }}>
+            <li>
+              Physical quantum circuits are built using superconducting qubits,
+              trapped ions, or photonic systems.
+            </li>
+            <li>
+              Each gate is implemented via precise control pulses or laser
+              operations.
+            </li>
+            <li>
+              Layout and connectivity are limited by hardware architecture.
+            </li>
+            <li>
+              Noise and decoherence are major challenges; error correction is
+              essential.
+            </li>
+            <li>
+              Manufacturing requires ultra-low temperatures and advanced
+              nanofabrication.
+            </li>
+            <li>
+              Measurement is typically done via dispersive readout in
+              superconducting qubits.
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );
