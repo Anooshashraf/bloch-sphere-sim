@@ -1,20 +1,3 @@
-// "use client";
-
-// import dynamic from "next/dynamic";
-// import { FC, ReactNode } from "react";
-
-// interface ClientOnlyProps {
-//   children: ReactNode;
-// }
-
-// const ClientOnly: FC<ClientOnlyProps> = ({ children }) => <>{children}</>;
-
-// export const BlochSphereNoSSR = dynamic(() => import("./BlochSphere"), {
-//   ssr: false,
-// });
-// export const CircuitNoSSR = dynamic(() => import("./circuit"), { ssr: false });
-
-// export default ClientOnly;
 "use client";
 
 import dynamic from "next/dynamic";
