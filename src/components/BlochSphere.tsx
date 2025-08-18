@@ -492,7 +492,7 @@ const BlochSphere: React.FC = () => {
           background: "linear-gradient(90deg, #0077ff, #ffc300)",
           WebkitBackgroundClip: "text",
           backgroundClip: "text",
-          color: "transparent",
+          color: "#4c6cff",
         }}
       >
         Bloch Sphere Simulator
