@@ -8,7 +8,6 @@ interface ResultsPanelProps {
 const describeResults = (data: any): string => {
   if (!data) return "No results to display";
 
-  // Handle Qiskit-style results
   if (data?.results?.[0]?.data?.counts) {
     const counts: Record<string, number> = data.results[0].data.counts;
     const total = Object.values(counts).reduce<number>(
