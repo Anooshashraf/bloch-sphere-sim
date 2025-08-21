@@ -376,8 +376,8 @@ export default function Circuit({ onResults }: CircuitProps) {
     ];
     const algorithmCode = algorithmCodeLines.join("\n");
 
-    const explanation = `This result shows the outcome of running the ${result.algorithm} algorithm. 
-The final qubit states (or measurement results) are shown under Technical Result.`;
+    const explanation = `This result shows the outcome of running the ${result.algorithm} algorithm.
+  The final qubit states (or measurement results) are shown under Technical Result.`;
 
     const wrappedResult = {
       code: algorithmCode,
