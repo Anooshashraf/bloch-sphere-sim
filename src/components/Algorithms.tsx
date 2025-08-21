@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-
-// === unchanged logic constants ===
+import ResultsPanel from "./Results";
 
 const GATE_PALETTE = [
   { label: "X", name: "Pauli-X" },
@@ -238,13 +237,13 @@ const QUANTUM_ALGORITHMS = [
   },
 ];
 
-type CircuitProps = {
-  onRun?: (result: any) => void; // optional callback parent can provide
-};
+interface CircuitProps {
+  onResults?: (results: any) => void; // optional callback parent can provide
+}
 
 // === component ===
 // NOTE: I preserved function names and logic exactly; only UI sizing/styling adjusted so it can live inside your new layout.
-export default function Circuit({ onRun }: CircuitProps) {
+export default function Circuit({ onResults }: CircuitProps) {
   // === state (unchanged) ===
   const [circuit, setCircuit] = useState(INIT_CIRCUIT);
   const [selectedGate, setSelectedGate] = useState<string | null>(null);
@@ -258,6 +257,8 @@ export default function Circuit({ onRun }: CircuitProps) {
   );
   const [algorithmStep, setAlgorithmStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [algorithmCode, setAlgorithmCode] = useState<string>("");
+  const [showResults, setShowResults] = useState(false);
 
   // local result UI state (new, non-invasive)
   const [lastRun, setLastRun] = useState<any | null>(null);
@@ -357,10 +358,9 @@ export default function Circuit({ onRun }: CircuitProps) {
 
     return finalStates;
   };
-
-  // === run integration (new) ===
   const runCircuit = () => {
     const finalStates = calculateFinalState();
+
     const result = {
       algorithm: selectedAlgorithm ?? "custom",
       circuit,
@@ -369,23 +369,37 @@ export default function Circuit({ onRun }: CircuitProps) {
       timestamp: Date.now(),
     };
 
-    // call parent callback if provided
-    if (onRun) {
+    // --- Build a human-friendly Algorithm Code (ASCII grid) instead of JSON ---
+    const algorithmCodeLines = [
+      `// ${result.algorithm} algorithm — circuit representation`,
+      ...circuit.map((row) => row.map((g) => g || "·").join("  |  ")), // use · for empty slots
+    ];
+    const algorithmCode = algorithmCodeLines.join("\n");
+
+    const explanation = `This result shows the outcome of running the ${result.algorithm} algorithm. 
+The final qubit states (or measurement results) are shown under Technical Result.`;
+
+    const wrappedResult = {
+      code: algorithmCode,
+      counts: finalStates,
+      explanation,
+    };
+
+    console.log("wrappedResult ->", wrappedResult);
+
+    if (onResults) {
       try {
-        onRun(result);
+        onResults(wrappedResult);
       } catch (e) {
-        // don't break the component if parent callback throws
-        // (parent may be switching pages, etc.)
         console.warn("onRun callback error:", e);
       }
     }
 
-    // keep a local copy for quick inspection
-    setLastRun(result);
+    // optional local state if Circuit wants to preview its own results
+    setLastRun(wrappedResult);
     setShowResultsPanel(true);
   };
 
-  // === UI styles: adjusted to be layout-friendly for your MainApp grid ===
   const cardStyle: React.CSSProperties = {
     background: "rgba(24,28,36,0.98)",
     borderRadius: 12,
@@ -441,12 +455,51 @@ export default function Circuit({ onRun }: CircuitProps) {
 
   const finalStates = calculateFinalState();
 
-  // copy last run JSON
   const copyResults = async () => {
     if (!lastRun) return;
     try {
-      await navigator.clipboard.writeText(JSON.stringify(lastRun, null, 2));
-      // optional: quick visual feedback could be added
+      const r = typeof lastRun === "string" ? JSON.parse(lastRun) : lastRun;
+
+      const code = r.code ?? "";
+      const counts = r.counts ?? r.finalStates ?? r.count ?? null;
+      const explanation = r.explanation ?? r.description ?? "";
+
+      const formatCounts = (c: any) => {
+        if (c == null) return "No technical results available.";
+        if (Array.isArray(c)) {
+          return c
+            .map(
+              (x, i) =>
+                `${i + 1}. ${typeof x === "string" ? x : JSON.stringify(x)}`
+            )
+            .join("\n");
+        }
+        if (typeof c === "object") {
+          return Object.entries(c)
+            .map(([k, v]) => `${k}: ${v}`)
+            .join("\n");
+        }
+        return String(c);
+      };
+
+      const payloadText = `--- Algorithm Code ---\n${
+        code || "(none)"
+      }\n\n--- Technical Results ---\n${formatCounts(
+        counts
+      )}\n\n--- Explanation ---\n${explanation || "(none)"}\n`;
+
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(payloadText);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = payloadText;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+      }
+
+      console.log("Formatted results copied to clipboard");
     } catch (e) {
       console.warn("copy failed", e);
     }
@@ -917,7 +970,6 @@ export default function Circuit({ onRun }: CircuitProps) {
         </div>
       )}
 
-      {/* Local results panel (new, optional) */}
       {lastRun && (
         <div
           style={{
@@ -933,7 +985,7 @@ export default function Circuit({ onRun }: CircuitProps) {
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <strong style={{ color: "#ffc300" }}>Last Run Results</strong>
+            <strong style={{ color: "#ffc300" }}>Run Results</strong>
             <div style={{ display: "flex", gap: 8 }}>
               <button
                 onClick={() => setShowResultsPanel((s) => !s)}
@@ -958,25 +1010,14 @@ export default function Circuit({ onRun }: CircuitProps) {
             </div>
           </div>
 
-          {showResultsPanel && (
-            <pre
-              style={{
-                whiteSpace: "pre-wrap",
-                wordBreak: "break-word",
-                background: "#0f1720",
-                padding: 12,
-                borderRadius: 6,
-                fontSize: 12,
-                color: "#e6eef8",
-                marginTop: 8,
-                maxHeight: 220,
-                overflow: "auto",
-                width: "100%",
-              }}
-            >
-              {JSON.stringify(lastRun, null, 2)}
-            </pre>
-          )}
+          {showResultsPanel ? (
+            <div style={{ width: "100%" }}>
+              <ResultsPanel
+                results={lastRun}
+                onBack={() => setShowResultsPanel(false)}
+              />
+            </div>
+          ) : null}
         </div>
       )}
 

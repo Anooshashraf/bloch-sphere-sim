@@ -1,95 +1,162 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 interface ResultsPanelProps {
   results: any;
   onBack: () => void;
 }
 
-const describeResults = (data: any): string => {
-  if (!data) return "No results to display";
-
-  if (data?.results?.[0]?.data?.counts) {
-    const counts: Record<string, number> = data.results[0].data.counts;
-    const total = Object.values(counts).reduce<number>(
-      (sum: number, val: number) => sum + val,
-      0
-    );
-    const mostFrequent = Object.entries(counts).reduce(
-      (max, [key, val]) => (val > max[1] ? [key, val] : max),
-      ["", 0] as [string, number]
-    );
-    return `🔢 Measurement Results (${total} shots):
-    • Most frequent outcome: ${mostFrequent[0]} (${mostFrequent[1]} occurrences)
-    • ${Object.keys(counts).length} unique outcomes`;
-  }
-
-  // Handle plain counts object
-  if (typeof data === "object" && !Array.isArray(data)) {
-    const counts: Record<string, number> = data.counts || data;
-    if (Object.keys(counts).some((k) => /^[01]+$/.test(k))) {
-      const total = Object.values(counts).reduce<number>(
-        (sum: number, val: number) => sum + val,
-        0
-      );
-      const outcomes = Object.entries(counts)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 3);
-      return `📊 Top Measurements (${total} shots):${outcomes
-        .map(
-          ([outcome, count]) =>
-            `\n• ${outcome}: ${count} (${Math.round((count / total) * 100)}%)`
-        )
-        .join("")}`;
+function tryParseResults(raw: any) {
+  if (!raw) return { code: "", counts: null, explanation: "", raw };
+  if (typeof raw === "string") {
+    try {
+      const parsed = JSON.parse(raw);
+      return {
+        code: parsed.code ?? "",
+        counts: parsed.counts ?? parsed.finalStates ?? parsed.count ?? null,
+        explanation: parsed.explanation ?? parsed.description ?? "",
+        raw: parsed,
+      };
+    } catch {
+      return { code: "", counts: null, explanation: raw, raw };
     }
-    return `📦 Results Data:\n${JSON.stringify(data, null, 2)}`;
   }
+  return {
+    code: raw.code ?? "",
+    counts: raw.counts ?? raw.finalStates ?? raw.count ?? null,
+    explanation: raw.explanation ?? raw.description ?? "",
+    raw,
+  };
+}
 
-  // Handle array results (statevector)
-  if (Array.isArray(data)) {
-    const qubitCount = Math.log2(data.length);
-    return `🌌 Quantum State Vector:
-    • Qubits: ${qubitCount} (${data.length} amplitudes)
-    • First amplitude: ${data[0].toFixed(4)}${
-      data.length > 1
-        ? `\n• Last amplitude: ${data[data.length - 1].toFixed(4)}`
-        : ""
-    }`;
-  }
-
-  return `✅ Algorithm Completed:\n${JSON.stringify(data, null, 2)}`;
-};
-
-const ResultsPanel: React.FC<ResultsPanelProps> = ({ results, onBack }) => {
+export const ResultsPanel: React.FC<ResultsPanelProps> = ({
+  results,
+  onBack,
+}) => {
   if (!results) {
     return (
-      <div className="text-[#9aa0c7] p-4 bg-[#0f1116] rounded border border-dashed border-[#4cc9f0]">
-        ⚠️ No results available. Run a circuit first.
+      <div className="text-[#9aa0c7]">
+        No results available yet. Run a circuit or algorithm to see results.
       </div>
     );
   }
 
+  const parsed = tryParseResults(results);
+  const { code, counts, explanation, raw } = parsed;
+
+  useEffect(() => {
+    console.log("ResultsPanel rendered ->", { code, counts, explanation });
+  }, [results]);
+
+  const downloadJson = () => {
+    const blob = new Blob([JSON.stringify(raw ?? results, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "quantum-results.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const renderCounts = (c: any) => {
+    if (!c)
+      return (
+        <div className="text-sm text-[#9aa0c7]">
+          No technical results available.
+        </div>
+      );
+
+    if (Array.isArray(c)) {
+      return (
+        <div className="space-y-2">
+          {c.map((item, idx) => (
+            <div
+              key={idx}
+              className="p-2 bg-[#0f1116] rounded-md text-sm text-white"
+            >
+              {typeof item === "string" ? item : JSON.stringify(item)}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (typeof c === "object") {
+      return (
+        <div className="space-y-2">
+          {Object.entries(c).map(([k, v]) => (
+            <div
+              key={k}
+              className="p-2 bg-[#0f1116] rounded-md text-sm text-white flex justify-between"
+            >
+              <span className="font-mono">{k}</span>
+              <span className="text-[#9aa0c7]">{String(v)}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    return <div className="text-sm text-white">{String(c)}</div>;
+  };
+
   return (
-    <div className="space-y-4">
-      <div className="p-4 bg-[#1a1d2e] rounded-lg border border-[#4cc9f0]">
-        <h3 className="text-[#4cc9f0] font-bold mb-2">Results Analysis</h3>
-        <div className="text-[#c5c8e0] whitespace-pre-wrap font-mono text-sm">
-          {describeResults(results)}
+    <div className="p-4">
+      <div className="flex justify-between items-center mb-4">
+        <div className="text-lg font-semibold text-[#ffc300]">Run Results</div>
+        <div className="flex gap-2">
+          <button
+            onClick={onBack}
+            className="px-3 py-1 rounded bg-[#3b82f6] text-white hover:bg-[#2563eb]"
+          >
+            Back
+          </button>
         </div>
       </div>
 
-      <div className="bg-[#0f1116] p-4 rounded border border-[#2d2f3d]">
-        <div className="text-[#9aa0c7] text-sm mb-2">Raw Data:</div>
-        <pre className="text-sm overflow-auto max-h-60">
-          {JSON.stringify(results, null, 2)}
-        </pre>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Algorithm Code */}
+        <div className="bg-[#1e2235] border border-[#2a2f4c] rounded-xl shadow-lg">
+          <div className="border-b border-[#2a2f4c] p-3 font-semibold text-lg text-white">
+            Algorithm Code
+          </div>
+          <div className="p-3">
+            <pre className="bg-[#0f1116] p-3 rounded text-sm text-[#c5f2e2] overflow-auto">
+              {code || "No algorithm code provided."}
+            </pre>
+          </div>
+        </div>
+
+        {/* Technical Result */}
+        <div className="bg-[#1e2235] border border-[#2a2f4c] rounded-xl shadow-lg">
+          <div className="border-b border-[#2a2f4c] p-3 font-semibold text-lg text-white">
+            Technical Result
+          </div>
+          <div className="p-3 text-sm text-[#9aa0c7]">
+            {renderCounts(counts)}
+          </div>
+        </div>
+
+        {/* Explanation */}
+        <div className="bg-[#1e2235] border border-[#2a2f4c] rounded-xl shadow-lg">
+          <div className="border-b border-[#2a2f4c] p-3 font-semibold text-lg text-white">
+            Explanation
+          </div>
+          <div className="p-3 text-sm text-[#d1d5e8] whitespace-pre-line">
+            {explanation || "No explanation provided."}
+          </div>
+        </div>
       </div>
 
-      <button
-        className="mt-4 px-4 py-2 bg-[#4cc9f0] hover:bg-[#3ab0d0] text-black rounded transition-colors"
-        onClick={onBack}
-      >
-        ← Back to Circuit
-      </button>
+      <div className="mt-4 bg-[#0b0d11] border border-[#1f2530] rounded p-3 text-sm text-[#9aa0c7]">
+        <div className="font-semibold mb-2 text-[#c7d0e6]">
+          Raw Technical Data
+        </div>
+        <pre className="max-h-48 overflow-auto">
+          {JSON.stringify(raw ?? results, null, 2)}
+        </pre>
+      </div>
     </div>
   );
 };
