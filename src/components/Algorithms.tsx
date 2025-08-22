@@ -399,7 +399,6 @@ export default function Circuit({ onResults }: CircuitProps) {
     setLastRun(wrappedResult);
     setShowResultsPanel(true);
   };
-
   const cardStyle: React.CSSProperties = {
     background: "rgba(24,28,36,0.98)",
     borderRadius: 12,

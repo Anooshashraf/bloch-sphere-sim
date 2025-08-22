@@ -220,7 +220,6 @@ function ResultsPanel({
     </div>
   );
 }
-
 // ---------------- Main App section ----------------
 const MainAppSection = () => {
   // which tool panel is active
@@ -233,6 +232,7 @@ const MainAppSection = () => {
 
   // This handler will be passed down as `onRun` to Circuit (and optionally to BlochSphere/Algorithms)
   const handleRun = (result: any) => {
+    console.log("Results received in parent:", result);
     setResults(result);
     setActivePanel("results"); // auto-switch to results
   };
