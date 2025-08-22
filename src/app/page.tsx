@@ -368,7 +368,7 @@ const MainAppSection = () => {
                 <h3 className="text-lg text-[#cfe4ff] mb-4">Results</h3>
                 <ResultsPanel
                   results={results}
-                  onBack={() => setActivePanel("circuit")}
+                  onBack={() => setResults(null)}
                 />
               </div>
             )}

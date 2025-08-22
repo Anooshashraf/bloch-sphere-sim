@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 
 interface ResultsPanelProps {
-  results: any;
+  results: {
+    code: string;
+    counts: any[];
+    explanation: string;
+  } | null;
   onBack: () => void;
 }
 

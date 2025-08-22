@@ -291,7 +291,6 @@ export default function Circuit({ onResults }: CircuitProps) {
     return () => clearTimeout(timer);
   }, [isPlaying, algorithmStep, selectedAlgorithm]);
 
-  // === core logic functions (unchanged) ===
   const currentAlgorithm = selectedAlgorithm
     ? QUANTUM_ALGORITHMS.find((a) => a.id === selectedAlgorithm)
     : null;
@@ -368,11 +367,9 @@ export default function Circuit({ onResults }: CircuitProps) {
       finalStates,
       timestamp: Date.now(),
     };
-
-    // --- Build a human-friendly Algorithm Code (ASCII grid) instead of JSON ---
     const algorithmCodeLines = [
       `// ${result.algorithm} algorithm — circuit representation`,
-      ...circuit.map((row) => row.map((g) => g || "·").join("  |  ")), // use · for empty slots
+      ...circuit.map((row) => row.map((g) => g || "·").join("  |  ")),
     ];
     const algorithmCode = algorithmCodeLines.join("\n");
 
@@ -399,6 +396,7 @@ export default function Circuit({ onResults }: CircuitProps) {
     setLastRun(wrappedResult);
     setShowResultsPanel(true);
   };
+
   const cardStyle: React.CSSProperties = {
     background: "rgba(24,28,36,0.98)",
     borderRadius: 12,
@@ -451,9 +449,7 @@ export default function Circuit({ onResults }: CircuitProps) {
     background: "linear-gradient(90deg, #ff9800 0%, #ff5722 100%)",
     minWidth: "auto",
   };
-
   const finalStates = calculateFinalState();
-
   const copyResults = async () => {
     if (!lastRun) return;
     try {
@@ -504,13 +500,11 @@ export default function Circuit({ onResults }: CircuitProps) {
     }
   };
 
-  // === Render (logic unchanged, only small additions for run/results) ===
   return (
     <div style={cardStyle}>
       <h2 style={{ textAlign: "center", letterSpacing: 1, marginBottom: 12 }}>
         <span style={{ color: "#4c6cff" }}>Quantum Playground</span>
       </h2>
-
       {/* Algorithm Selection (UI slightly compressed to match new layout) */}
       <div
         style={{
@@ -649,7 +643,6 @@ export default function Circuit({ onResults }: CircuitProps) {
           </div>
         )}
       </div>
-
       {/* Initial States Input */}
       {showEquations && (
         <div
@@ -690,7 +683,6 @@ export default function Circuit({ onResults }: CircuitProps) {
           </div>
         </div>
       )}
-
       {/* Gate Palette */}
       <div
         style={{
@@ -740,7 +732,6 @@ export default function Circuit({ onResults }: CircuitProps) {
           </div>
         ))}
       </div>
-
       {/* Circuit Controls */}
       <div
         style={{
@@ -776,7 +767,6 @@ export default function Circuit({ onResults }: CircuitProps) {
           {showEquations ? "Hide States" : "Show States"}
         </button>
       </div>
-
       {/* Demo Circuit */}
       <div
         style={{
@@ -943,8 +933,7 @@ export default function Circuit({ onResults }: CircuitProps) {
           </div>
         ))}
       </div>
-
-      {/* Final States Display */}
+      Final States Display
       {showEquations && (
         <div
           style={{
@@ -968,7 +957,6 @@ export default function Circuit({ onResults }: CircuitProps) {
           </div>
         </div>
       )}
-
       {lastRun && (
         <div
           style={{
@@ -1019,13 +1007,10 @@ export default function Circuit({ onResults }: CircuitProps) {
           ) : null}
         </div>
       )}
-
       <div style={{ textAlign: "center", color: "#aaa", fontSize: 12 }}>
         All major gates: Pauli-X, Y, Z, Hadamard, Phase, T, CNOT, Toffoli, SWAP,
         Identity, Measure.
       </div>
-
-      {/* Notes Section (same content, slightly tighter layout) */}
       <div
         style={{
           display: "flex",
@@ -1036,7 +1021,6 @@ export default function Circuit({ onResults }: CircuitProps) {
           flexWrap: "wrap",
         }}
       >
-        {/* Gate Effects */}
         <div
           style={{
             background: "linear-gradient(120deg, #232b3a 80%, #2d3750 100%)",
