@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌀 Quantum Bloch Sphere Simulator
 
-## Getting Started
+An interactive **Bloch Sphere Simulator** built with **React + Next.js**.  
+This project is designed for learning, visualizing, and experimenting with **quantum states**, **quantum gates**, and **algorithms** in an intuitive and modern UI.  
 
-First, run the development server:
+---
 
+## ✨ Features
+
+- 🎛 **Interactive Bloch Sphere**  
+  Visualize single-qubit quantum states in real-time.
+
+- ⚡ **Circuit Simulator**  
+  Drag and drop quantum gates (X, H, Z, CX, T, etc.) and see their effects on the qubit state.
+
+- 🧠 **Algorithm Runner**  
+  Run pre-defined algorithms like **Deutsch**, **Custom Circuits**, and more.  
+  Results are displayed with:
+  - Algorithm Code  
+  - Technical Measurement Results  
+  - Human-readable Explanation  
+
+- 📊 **Results Panel**  
+  View detailed output, raw technical data, and even download results as JSON.  
+
+- 📱 **Responsive & Modern UI**  
+  Built with **TailwindCSS + shadcn/ui**, fully responsive and mobile-friendly.  
+
+📂 Project Structure
+/components
+   ├── BlochSphere.tsx      # Interactive Bloch sphere
+   ├── Circuit.tsx          # Quantum circuit builder
+   ├── Algorithms.tsx       # Algorithm runner
+   ├── Results.tsx          # Results panel
+   └── ClientOnly.tsx       # No-SSR wrapper
+
+/pages
+   ├── index.tsx            # Home page with navigation
+   └── _app.tsx             # Global app wrapper
+
+🧑‍💻 Tech Stack
+
+React + Next.js — Core framework
+Three.js — 3D visualization of the Bloch Sphere
+TailwindCSS — Styling
+shadcn/ui — UI components
+TypeScript — Type safety
+
+📘 Educational Notes
+
+Bloch Sphere: Represents a single qubit state as a point on a sphere.
+Gates: Operations like X, H, Z rotate or transform the state vector.
+Measurement: Collapses the quantum state into classical outcomes (0 or 1).
+Algorithms: Small demos (e.g., Deutsch) showcase how circuits work.
+## 🚀 Getting Started
+
+📥 Export & Results
+
+Download raw results as JSON for later analysis.
+View algorithm code, counts, explanations, and state outputs in one panel.
+
+### 1. Clone the repository
 ```bash
-npm run dev
+git clone https://github.com/yourusername/bloch-sphere-simulator.git
+cd bloch-sphere-simulator
+
+2. Install dependencies
+npm install
 # or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+yarn install
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
