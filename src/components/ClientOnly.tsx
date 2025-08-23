@@ -22,7 +22,6 @@ export interface BlochSphereProps {
 
 export interface AlgorithmsProps {
   onRun?: (result: any) => void;
-  // add others if needed
 }
 
 /**
@@ -37,9 +36,6 @@ export const BlochSphereNoSSR = dynamic(
   }
 ) as unknown as React.ComponentType<BlochSphereProps>;
 
-/**
- * Dynamically imported Circuit component with SSR disabled
- */
 export const CircuitNoSSR = dynamic(
   () => import("./circuit").then((mod) => mod.default),
   {
