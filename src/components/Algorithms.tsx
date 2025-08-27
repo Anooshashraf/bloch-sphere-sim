@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import ResultsPanel from "./Results";
 
 const GATE_PALETTE = [
   { label: "X", name: "Pauli-X" },
@@ -996,15 +995,6 @@ export default function Circuit({ onResults }: CircuitProps) {
               </button>
             </div>
           </div>
-
-          {showResultsPanel ? (
-            <div style={{ width: "100%" }}>
-              <ResultsPanel
-                results={lastRun}
-                onBack={() => setShowResultsPanel(false)}
-              />
-            </div>
-          ) : null}
         </div>
       )}
       <div style={{ textAlign: "center", color: "#aaa", fontSize: 12 }}>

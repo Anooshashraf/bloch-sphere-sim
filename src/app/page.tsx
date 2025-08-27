@@ -4,7 +4,6 @@ import ClientOnly, {
   BlochSphereNoSSR,
   CircuitNoSSR,
   AlgorithmsNoSSR,
-  ResultsNoSSR,
 } from "@/components/ClientOnly";
 
 import React, { useState, useEffect, useRef } from "react";
