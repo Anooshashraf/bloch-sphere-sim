@@ -4,7 +4,6 @@ import ClientOnly, {
   BlochSphereNoSSR,
   CircuitNoSSR,
   AlgorithmsNoSSR,
-  ResultsNoSSR,
 } from "@/components/ClientOnly";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -142,100 +141,12 @@ const ParticleBackground = () => {
   );
 };
 
-// ---------------- Results Panel ----------------
-function ResultsPanel({
-  results,
-  onBack,
-}: {
-  results: any | null;
-  onBack?: () => void;
-}) {
-  if (!results) {
-    return (
-      <div className="p-6 rounded-lg bg-[#13131a] border border-[#24243a]">
-        <h3 className="text-xl text-[#ffc300] mb-2">No results yet</h3>
-        <p className="text-sm text-[#bdbde8]">
-          Run an algorithm to see results here.
-        </p>
-        {onBack && (
-          <div className="mt-4">
-            <button
-              onClick={onBack}
-              className="px-3 py-2 rounded bg-[#4c6cff] text-white"
-            >
-              Back
-            </button>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  const download = () => {
-    const payload = JSON.stringify(results, null, 2);
-    const blob = new Blob([payload], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `quantum-results-${Date.now()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  return (
-    <div className="p-6 rounded-lg bg-[#0f1116] border border-[#232339]">
-      <div className="flex justify-between items-start gap-4">
-        <div>
-          <h3 className="text-xl text-[#ffc300] mb-1">
-            {results.algorithm ?? "Run Results"}
-          </h3>
-          <div className="text-xs text-[#9aa0c7]">
-            {results.timestamp
-              ? new Date(results.timestamp).toLocaleString()
-              : ""}
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            onClick={download}
-            className="px-3 py-2 rounded bg-[#2e7d32] text-white"
-          >
-            Download JSON
-          </button>
-          {onBack && (
-            <button
-              onClick={onBack}
-              className="px-3 py-2 rounded bg-[#4c6cff] text-white"
-            >
-              Back
-            </button>
-          )}
-        </div>
-      </div>
-
-      <pre className="mt-4 bg-[#0b0c10] p-4 rounded text-sm overflow-auto text-[#dbe6ff]">
-        {JSON.stringify(results, null, 2)}
-      </pre>
-    </div>
-  );
-}
 // ---------------- Main App section ----------------
 const MainAppSection = () => {
   // which tool panel is active
   const [activePanel, setActivePanel] = useState<
-    "bloch" | "circuit" | "algorithms" | "results"
+    "bloch" | "circuit" | "algorithms"
   >("bloch");
-
-  // store results object from child components
-  const [results, setResults] = useState<any | null>(null);
-
-  // This handler will be passed down as `onRun` to Circuit (and optionally to BlochSphere/Algorithms)
-  const handleRun = (result: any) => {
-    console.log("Results received in parent:", result);
-    setResults(result);
-    setActivePanel("results"); // auto-switch to results
-  };
 
   return (
     <ClientOnly>
@@ -253,32 +164,10 @@ const MainAppSection = () => {
             <button
               className="px-3 py-1 rounded bg-[#151530] hover:bg-[#252550]"
               onClick={() => {
-                // quick-reset results for demo
-                setResults(null);
                 setActivePanel("circuit");
               }}
             >
               Reset
-            </button>
-            <button
-              className="px-3 py-1 rounded bg-[#4cc9f0] text-[#0a0a1a] hover:bg-[#3ab0d0]"
-              onClick={() => {
-                // export current results if present
-                if (results) {
-                  const payload = JSON.stringify(results, null, 2);
-                  const blob = new Blob([payload], {
-                    type: "application/json",
-                  });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement("a");
-                  a.href = url;
-                  a.download = `quantum-results-${Date.now()}.json`;
-                  a.click();
-                  URL.revokeObjectURL(url);
-                }
-              }}
-            >
-              Export
             </button>
           </div>
         </header>
@@ -316,16 +205,6 @@ const MainAppSection = () => {
             >
               Algorithms Library
             </button>
-            <button
-              className={`text-left px-3 py-2 rounded ${
-                activePanel === "results"
-                  ? "bg-[#1b2446]"
-                  : "hover:bg-[#121428]"
-              }`}
-              onClick={() => setActivePanel("results")}
-            >
-              Results
-            </button>
 
             <div className="mt-6 text-sm text-[#9aa0c7]">
               Examples
@@ -352,24 +231,14 @@ const MainAppSection = () => {
                 <h3 className="text-lg text-[#cfe4ff] mb-4">
                   Circuit Designer
                 </h3>
-                <CircuitNoSSR onRun={handleRun} />
+                <CircuitNoSSR />
               </div>
             )}
 
             {activePanel === "algorithms" && (
               <div className="rounded-xl p-4 bg-[#0b0c12] border border-[#232339]">
                 <h3 className="text-lg text-[#cfe4ff] mb-4">Algorithms</h3>
-                <AlgorithmsNoSSR onRun={handleRun} />
-              </div>
-            )}
-
-            {activePanel === "results" && (
-              <div className="rounded-xl p-4 bg-[#0b0c12] border border-[#232339]">
-                <h3 className="text-lg text-[#cfe4ff] mb-4">Results</h3>
-                <ResultsPanel
-                  results={results}
-                  onBack={() => setResults(null)}
-                />
+                <AlgorithmsNoSSR />
               </div>
             )}
           </main>
