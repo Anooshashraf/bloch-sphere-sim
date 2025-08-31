@@ -9,7 +9,7 @@ interface ClientOnlyProps {
 
 const ClientOnly: FC<ClientOnlyProps> = ({ children }) => {
   return <>{children}</>;
-};.
+};
 
 export interface CircuitProps {
   onRun?: (result: any) => void;
