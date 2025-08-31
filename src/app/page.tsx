@@ -333,11 +333,11 @@ const MainAppSection = () => {
                 <li>Entanglement</li>
                 <li>Grover's Search</li>
                 <li>Shor's Algorithm</li>
+                <li>Grover's Algorithm</li>
               </ul>
             </div>
           </aside>
 
-          {/* Content area */}
           <main className="flex-1 p-6 overflow-auto">
             {activePanel === "bloch" && (
               <div className="rounded-xl p-4 bg-[#0b0c12] border border-[#232339]">
