@@ -680,6 +680,7 @@ export default function Circuit(_: CircuitProps) {
           {showEquations ? "Hide States" : "Show States"}
         </button>
       </div>
+
       {/* Demo Circuit */}
       <div
         style={{
@@ -875,6 +876,54 @@ export default function Circuit(_: CircuitProps) {
       <div style={{ textAlign: "center", color: "#aaa", fontSize: 12 }}>
         All major gates: Pauli-X, Y, Z, Hadamard, Phase, T, CNOT, Toffoli, SWAP,
         Identity, Measure.
+      </div>
+
+      {/* RESULTS PANEL */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: 8,
+          marginBottom: 12,
+          flexWrap: "wrap",
+        }}
+      >
+        {finalStates && (
+          <div
+            style={{
+              marginTop: 20,
+              padding: 16,
+              background: "#232b3a",
+              borderRadius: 8,
+            }}
+          >
+            <h3 style={{ color: "#ffc300" }}>Results</h3>
+
+            {currentAlgorithm && (
+              <>
+                <p>
+                  <b>{currentAlgorithm.name}</b>
+                </p>
+                <p>{currentAlgorithm.description}</p>
+                <p>
+                  <b>Complexity:</b> {currentAlgorithm.complexity}
+                </p>
+                <ul>
+                  {currentAlgorithm.steps.map((s, i) => (
+                    <li key={i}>{s}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+
+            <h4 style={{ marginTop: 12 }}>Final Qubit States:</h4>
+            {finalStates.map((state, i) => (
+              <div key={i}>
+                q{i}: <span style={{ color: "#4c6cff" }}>{state}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div
