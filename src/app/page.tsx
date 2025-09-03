@@ -22,7 +22,6 @@ export default function HomePage() {
           <div className="w-24 h-1 bg-gradient-to-r from-[#ffc300] to-[#ff00c8] mx-auto mb-12"></div>
         </div>
 
-        {/* Feature Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {/* Algorithms Card */}
           <Link href="/algorithms">
