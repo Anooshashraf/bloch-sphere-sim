@@ -25,7 +25,7 @@ const INIT_CIRCUIT = [
 const QUANTUM_ALGORITHMS = [
   {
     id: "grover",
-    name: "Grover's Search Algorithm",
+    name: "Grover's Search Algorithm: ",
     description:
       "Finds a marked item in an unsorted database quadratically faster than classical algorithms.",
     complexity: "O(√N) vs classical O(N)",
@@ -45,7 +45,7 @@ const QUANTUM_ALGORITHMS = [
       "Grover's algorithm uses amplitude amplification to boost the probability of measuring the correct solution. The oracle 'marks' the solution by flipping its phase, and the diffusion operator inverts all amplitudes about the average, amplifying the marked item.",
   },
   {
-    id: "shor",
+    id: "shor: ",
     name: "Shor's Factoring Algorithm",
     description:
       "Factors large integers exponentially faster than classical algorithms, breaking RSA encryption.",
@@ -67,7 +67,7 @@ const QUANTUM_ALGORITHMS = [
       "Shor's algorithm reduces factoring to period finding. The quantum part finds the period of a function, which is then processed classically to find factors. The exponential speedup comes from the QFT and quantum parallelism.",
   },
   {
-    id: "deutsch",
+    id: "deutsch: ",
     name: "Deutsch-Jozsa Algorithm",
     description:
       "Determines if a function is constant or balanced with a single query.",
@@ -87,7 +87,7 @@ const QUANTUM_ALGORITHMS = [
       "This algorithm demonstrates quantum parallelism. By querying the function in superposition, it evaluates all possible inputs simultaneously and uses interference to determine the function's nature with certainty in one step.",
   },
   {
-    id: "teleport",
+    id: "teleport: ",
     name: "Quantum Teleportation",
     description: "Transfers quantum state between qubits using entanglement.",
     complexity: "Requires classical communication",
@@ -106,8 +106,8 @@ const QUANTUM_ALGORITHMS = [
       "Quantum teleportation transfers quantum information without moving physical particles. It uses entanglement as a resource and requires classical communication to complete the state transfer, preserving the no-cloning theorem.",
   },
   {
-    id: "qft",
-    name: "Fourier Transform",
+    id: "qft  ",
+    name: "Fourier Transform: ",
     description:
       "Quantum analog of discrete Fourier transform, exponentially faster than classical FFT for certain applications.",
     complexity: "O((log N)²) vs classical O(N log N)",
@@ -129,7 +129,7 @@ const QUANTUM_ALGORITHMS = [
   },
   {
     id: "bv",
-    name: "Bernstein-Vazirani Algorithm",
+    name: "Bernstein-Vazirani Algorithm: ",
     description:
       "Determines a secret bitstring with a single query, outperforming classical linear scans.",
     complexity: "O(1) vs classical O(n)",
@@ -150,7 +150,7 @@ const QUANTUM_ALGORITHMS = [
   },
   {
     id: "vqe",
-    name: "Variational Quantum Eigensolver",
+    name: "Variational Quantum Eigensolver: ",
     description:
       "Hybrid algorithm for finding molecular ground states using parameterized quantum circuits.",
     complexity: "Polynomial in qubits (NISQ-friendly)",
@@ -171,7 +171,7 @@ const QUANTUM_ALGORITHMS = [
   },
   {
     id: "qpe",
-    name: "Phase Estimation",
+    name: "Phase Estimation: ",
     description:
       "Estimates eigenvalue phase of unitary operator, core component of Shor's and chemistry algorithms.",
     complexity: "O(1/ε) precision with O(log(1/ε)) qubits",
@@ -191,7 +191,7 @@ const QUANTUM_ALGORITHMS = [
       "QPE solves the eigenvalue problem by encoding phase information in the counting register. It provides exponential speedup over classical methods for eigenproblems and matrix inversion.",
   },
   {
-    id: "qaa",
+    id: "qaa: ",
     name: "Quantum Amplitude Amplification",
     description:
       "Generalization of Grover's search that boosts success probability of quantum algorithms.",
@@ -211,7 +211,7 @@ const QUANTUM_ALGORITHMS = [
       "QAA provides quadratic speedup for any algorithm where solutions can be recognized. It works by rotating the state vector toward the good subspace through iterative reflections.",
   },
   {
-    id: "simon",
+    id: "simon: ",
     name: "Simon's Algorithm",
     description:
       "Solves the hidden subgroup problem for boolean functions, inspiring Shor's algorithm.",
@@ -239,8 +239,6 @@ interface CircuitProps {
   // results removed on purpose
 }
 
-// === component ===
-// NOTE: UI and logic preserved — only results display/handling reintroduced as requested.
 export default function Circuit(_: CircuitProps) {
   // === state (unchanged except results-related reintroduced minimally) ===
   const [circuit, setCircuit] = useState(INIT_CIRCUIT);
@@ -883,6 +881,7 @@ export default function Circuit(_: CircuitProps) {
         style={{
           display: "flex",
           justifyContent: "center",
+          width: "100%",
           gap: 8,
           marginBottom: 12,
           flexWrap: "wrap",
@@ -897,7 +896,7 @@ export default function Circuit(_: CircuitProps) {
               borderRadius: 8,
             }}
           >
-            <h3 style={{ color: "#ffc300" }}>Results</h3>
+            <h3 style={{ color: "#ffc300" }}>Results: </h3>
 
             {currentAlgorithm && (
               <>
