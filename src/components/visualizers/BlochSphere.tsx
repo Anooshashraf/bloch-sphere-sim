@@ -714,7 +714,6 @@ export default function BlochSphere({
         </div>
       </div>
 
-      {/* Loading shimmer effect */}
       {!containerRef.current && (
         <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl animate-pulse">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-700/20 to-transparent animate-shimmer"></div>
