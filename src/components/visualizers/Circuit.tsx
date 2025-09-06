@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useCallback } from "react";
 import * as math from "mathjs";
 
@@ -133,7 +135,7 @@ const simulateCircuit = (
   return probabilities;
 };
 
-const Circuit: React.FC = () => {
+const QuantumCircuitSimulator: React.FC = () => {
   const [numQubits, setNumQubits] = useState<number>(2);
   const [steps, setSteps] = useState<number>(3);
   const [circuit, setCircuit] = useState<CircuitStep[]>(
@@ -349,63 +351,66 @@ const Circuit: React.FC = () => {
             Selected: {selectedGate ? `${selectedGate} Gate` : "None"}
           </div>
 
-          <div
-            className="circuit-grid"
-            style={{
-              gridTemplateRows: `repeat(${numQubits + 1}, minmax(0, 1fr))`,
-              gridTemplateColumns: `repeat(${steps}, minmax(0, 1fr))`,
-            }}
-          >
+          <div className="grid gap-0 border border-gray-700 rounded-lg overflow-hidden">
             {/* Qubit labels */}
+            <div
+              className="grid"
+              style={{ gridTemplateColumns: `60px repeat(${steps}, 1fr)` }}
+            >
+              <div className="p-2 font-mono bg-gray-700 flex items-center justify-center border-r border-gray-600">
+                Qubit
+              </div>
+              {Array.from({ length: steps }).map((_, col) => (
+                <div
+                  key={`step-label-${col}`}
+                  className="p-2 bg-gray-700 flex items-center justify-center border-r border-gray-600"
+                >
+                  Step {col}
+                </div>
+              ))}
+            </div>
+
+            {/* Circuit cells */}
             {Array.from({ length: numQubits }).map((_, row) => (
               <div
-                key={`label-${row}`}
-                className="p-2 font-mono bg-gray-700 flex items-center justify-center"
+                key={`row-${row}`}
+                className="grid"
+                style={{ gridTemplateColumns: `60px repeat(${steps}, 1fr)` }}
               >
-                |0⟩{row}
-              </div>
-            ))}
-            <div className="p-2 bg-gray-700"></div> {/* Spacer */}
-            {/* Circuit cells */}
-            {Array.from({ length: numQubits }).map((_, row) =>
-              Array.from({ length: steps }).map((_, col) => {
-                const gatesInCell =
-                  circuit[col]?.filter((g) =>
-                    g.type === "CX"
-                      ? g.position.row === row || g.position.col === row
-                      : g.position.row === row && g.position.col === col
-                  ) || [];
+                <div className="p-2 font-mono bg-gray-700 flex items-center justify-center border-r border-t border-gray-600">
+                  |0⟩{row}
+                </div>
 
-                return (
-                  <div
-                    key={`cell-${row}-${col}`}
-                    className="border border-gray-600 min-h-[60px] flex items-center justify-center relative cursor-pointer hover:bg-gray-700"
-                    onClick={() => handleCellClick(row, col)}
-                  >
-                    {gatesInCell.map((gate, idx) => (
-                      <div
-                        key={idx}
-                        className="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center font-mono text-lg"
-                      >
-                        {renderGateSymbol(gate.type)}
-                      </div>
-                    ))}
+                {Array.from({ length: steps }).map((_, col) => {
+                  const gatesInCell =
+                    circuit[col]?.filter((g) =>
+                      g.type === "CX"
+                        ? g.position.row === row || g.position.col === row
+                        : g.position.row === row && g.position.col === col
+                    ) || [];
 
-                    {/* Draw wire between gates for multi-qubit operations */}
-                    {gatesInCell.some((g) => g.type === "CX") && (
-                      <div className="absolute left-0 right-0 h-0.5 bg-blue-500 top-1/2 transform -translate-y-1/2 -z-10"></div>
-                    )}
-                  </div>
-                );
-              })
-            )}
-            {/* Column labels */}
-            {Array.from({ length: steps }).map((_, col) => (
-              <div
-                key={`step-${col}`}
-                className="p-2 bg-gray-700 flex items-center justify-center"
-              >
-                Step {col}
+                  return (
+                    <div
+                      key={`cell-${row}-${col}`}
+                      className="min-h-[60px] flex items-center justify-center relative cursor-pointer hover:bg-gray-700 border-t border-r border-gray-600"
+                      onClick={() => handleCellClick(row, col)}
+                    >
+                      {gatesInCell.map((gate, idx) => (
+                        <div
+                          key={idx}
+                          className="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center font-mono text-lg"
+                        >
+                          {renderGateSymbol(gate.type)}
+                        </div>
+                      ))}
+
+                      {/* Draw wire between gates for multi-qubit operations */}
+                      {gatesInCell.some((g) => g.type === "CX") && (
+                        <div className="absolute left-0 right-0 h-0.5 bg-blue-500 top-1/2 transform -translate-y-1/2 -z-10"></div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             ))}
           </div>
@@ -436,4 +441,4 @@ const Circuit: React.FC = () => {
   );
 };
 
-export default Circuit;
+export default QuantumCircuitSimulator;

@@ -391,3 +391,9 @@
 //     </div>
 //   );
 // }
+
+import QuantumCircuitSimulator from "@/components/visualizers/Circuit";
+
+export default function CircuitPage() {
+  return <QuantumCircuitSimulator />;
+}
